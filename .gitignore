@@ -1,0 +1,4 @@
+.DS_Store
+stacktrace.log
+target
+*.class
