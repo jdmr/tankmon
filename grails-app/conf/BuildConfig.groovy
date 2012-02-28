@@ -20,6 +20,7 @@ grails.project.dependency.resolution = {
         grailsPlugins()
         grailsHome()
         grailsCentral()
+        mavenLocal()
         mavenCentral()
 
         // uncomment these to enable remote dependency resolution from public Maven repositories
@@ -34,18 +35,24 @@ grails.project.dependency.resolution = {
         // specify dependencies here under either 'build', 'compile', 'runtime', 'test' or 'provided' scopes eg.
 
         // runtime 'mysql:mysql-connector-java:5.1.16'
+        compile "org.jadira.usertype:usertype.jodatime:1.9"
     }
 
     plugins {
-        runtime ":hibernate:$grailsVersion"
-        runtime ":jquery:1.7.1"
-        runtime ":resources:1.1.6"
+        compile ":hibernate:$grailsVersion"
+        compile ":joda-time:1.3.1"
+        compile ":jquery:1.7.1"
+        compile ":resources:1.1.6"
+
+        runtime ":twitter-bootstrap:2.0.1.17"
+        runtime ":fields:1.0.1"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"
         //runtime ":cached-resources:1.0"
         //runtime ":yui-minify-resources:0.1.4"
 
+        build ":cloud-foundry:1.2.1"
         build ":tomcat:$grailsVersion"
     }
 }
