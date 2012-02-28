@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta name="layout" content="bootstrap"/>
-		<title>Grails Twitter Bootstrap Scaffolding</title>
+		<title>Inicio</title>
 	</head>
 
 	<body>
