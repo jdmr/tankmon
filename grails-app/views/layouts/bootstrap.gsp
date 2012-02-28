@@ -57,7 +57,7 @@
 			<hr>
 
 			<footer>
-				<p>&copy; Company 2011</p>
+                <p class='pull-right'>&copy; <a href='http://www.sistemashumanos.com'>Sistemas Humanos</a> 2012</p>
 			</footer>
 		</div>
 

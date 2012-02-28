@@ -130,3 +130,11 @@ jodatime.format.html5 = true
 grails.plugins.twitterbootstrap.fixtaglib = true
 
 grails.plugin.cloudfoundry.appname = 'tankmon'
+
+// Added by the Spring Security Core plugin:
+grails.plugins.springsecurity.userLookup.userDomainClassName = 'com.fruiz.tankmon.Usuario'
+grails.plugins.springsecurity.userLookup.authorityJoinClassName = 'com.fruiz.tankmon.UsuarioRol'
+grails.plugins.springsecurity.authority.className = 'com.fruiz.tankmon.Rol'
+grails.plugins.springsecurity.roleHierarchy = '''
+   ROLE_ADMIN > ROLE_CLIENTE
+'''
