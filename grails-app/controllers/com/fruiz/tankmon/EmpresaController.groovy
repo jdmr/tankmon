@@ -1,8 +1,10 @@
 package com.fruiz.tankmon
 
+import grails.plugins.springsecurity.Secured
 import grails.validation.ValidationException
 import org.springframework.dao.DataIntegrityViolationException
 
+@Secured(['ROLE_ADMIN'])
 class EmpresaController {
 
     def index() {
@@ -11,7 +13,7 @@ class EmpresaController {
 
     def lista() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [empresaInstanceList: Empresa.list(params), empresaInstanceTotal: Empresa.count()]
+        [empresas: Empresa.list(params), totalDeEmpresas: Empresa.count()]
     }
 
     def nueva() {

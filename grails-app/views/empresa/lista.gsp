@@ -56,25 +56,25 @@
                         </tr>
                     </thead>
                     <tbody>
-                    <g:each in="${empresaInstanceList}" var="empresaInstance">
+                    <g:each in="${empresas}" var="empresa">
                         <tr>
                         
-                            <td><g:link action="ver" id="${empresaInstance.id}">${fieldValue(bean: empresaInstance, field: "nombre")}</g:link></td>
+                            <td><g:link action="ver" id="${empresa.id}">${fieldValue(bean: empresa, field: "nombre")}</g:link></td>
                         
-                            <td>${fieldValue(bean: empresaInstance, field: "razonSocial")}</td>
+                            <td>${fieldValue(bean: empresa, field: "razonSocial")}</td>
                         
-                            <td>${fieldValue(bean: empresaInstance, field: "rfc")}</td>
+                            <td>${fieldValue(bean: empresa, field: "rfc")}</td>
                         
-                            <td>${fieldValue(bean: empresaInstance, field: "sitioWeb")}</td>
+                            <td>${fieldValue(bean: empresa, field: "sitioWeb")}</td>
                         
-                            <td>${fieldValue(bean: empresaInstance, field: "maximoUsuarios")}</td>
+                            <td>${fieldValue(bean: empresa, field: "maximoUsuarios")}</td>
                         
                         </tr>
                     </g:each>
                     </tbody>
                 </table>
                 <div class="pagination">
-                    <bootstrap:paginate total="${empresaInstanceTotal}" />
+                    <bootstrap:paginate total="${totalDeEmpresas}" />
                 </div>
 
             </div>
