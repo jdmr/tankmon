@@ -15,14 +15,14 @@
             <form action='${postUrl}' method='POST' id='loginForm' autocomplete='off'>
                 <div class="row-fluid">
                     <div class="control-group">
-                        <label for='username'><g:message code="springSecurity.login.username.label"/>:</label>
+                        <label for='username'><g:message code="springSecurity.login.username.label"/></label>
                         <input type='text' class='span4' name='j_username' id='username' required='required'/>
                     </div>
                 </div>
 
                 <div class="row-fluid">
                     <div class="control-group">
-                        <label for='password'><g:message code="springSecurity.login.password.label"/>:</label>
+                        <label for='password'><g:message code="springSecurity.login.password.label"/></label>
                         <input type='password' class='span4' name='j_password' id='password' required='required'/>
                     </div>
                 </div>
