@@ -58,5 +58,7 @@
 
 		<r:layoutResources/>
 
+        <g:pageProperty name="page.scripts" />
+
 	</body>
 </html>

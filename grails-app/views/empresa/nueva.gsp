@@ -16,39 +16,40 @@
         </ul>
         </content>
 		<div class="row-fluid">
-			<div class="span9">
 
 				<div class="page-header">
 					<h1><g:message code="default2.create.label" args="[entityName]" /></h1>
 				</div>
 
 				<g:if test="${flash.message}">
-				<bootstrap:alert class="alert-info">${flash.message}</bootstrap:alert>
+                    <bootstrap:alert class="alert-info fade in">${flash.message}</bootstrap:alert>
 				</g:if>
 
 				<g:hasErrors bean="${empresa}">
-				<bootstrap:alert class="alert-error">
-				<ul>
-					<g:eachError bean="${empresa}" var="error">
-					<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-					</g:eachError>
-				</ul>
-				</bootstrap:alert>
+                    <bootstrap:alert class="alert-error fade in">
+                        <ul>
+                            <g:eachError bean="${empresa}" var="error">
+                            <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+                            </g:eachError>
+                        </ul>
+                    </bootstrap:alert>
 				</g:hasErrors>
 
-					<g:form action="crea" >
+                <g:form action="crea" >
 				    <fieldset>
                         <g:render template="form"/>
                     </fieldset>
                     <p class="well" style="margin-top:10px;">
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-large btn-primary">
                             <i class="icon-ok icon-white"></i>
                             <g:message code="default.button.create.label" default="Create" />
                         </button>
+                        <g:link class="btn btn-large" action="lista">
+                            <g:message code="default.button.cancel.label" />
+                        </g:link>
                     </p>
                 </g:form>
 				
-			</div>
 
 		</div>
         <r:script>

@@ -1,10 +1,11 @@
 package com.fruiz.tankmon
 
+import grails.validation.ValidationException
 import org.springframework.dao.DataIntegrityViolationException
 
 class EmpresaController {
 
-    static allowedMethods = [crea: ['POST'], actualiza: ['POST'], elimina: 'POST']
+    static allowedMethods = [crea: ['POST'], actualiza: ['POST'], delete: 'POST']
 
     def index() {
         redirect action: 'lista', params: params
@@ -22,12 +23,14 @@ class EmpresaController {
 
     def crea() {
         def empresa = new Empresa(params)
-        if (!empresaInstance.save(flush:true)) {
+        try {
+            empresa.save(flush:true)
+        } catch(ValidationException e) {
             render view: 'nueva', model: [empresa: empresa]
             return
         }
 
-        flash.message = message(code: 'default.created.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresaInstance.nombre])
+        flash.message = message(code: 'default2.created.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
         redirect action: 'ver', id: empresa.id
     }
 
@@ -42,95 +45,65 @@ class EmpresaController {
         [empresa: empresa]
     }
 
-    def create() {
-		switch (request.method) {
-		case 'GET':
-        	[empresaInstance: new Empresa(params)]
-			break
-		case 'POST':
-	        def empresaInstance = new Empresa(params)
-	        if (!empresaInstance.save(flush: true)) {
-	            render view: 'create', model: [empresaInstance: empresaInstance]
-	            return
-	        }
-
-			flash.message = message(code: 'default.created.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresaInstance.id])
-	        redirect action: 'show', id: empresaInstance.id
-			break
-		}
-    }
-
-    def show() {
-        def empresaInstance = Empresa.get(params.id)
-        if (!empresaInstance) {
-			flash.message = message(code: 'default.not.found.message', args: [message(code: 'empresa.label', default: 'Empresa'), params.id])
-            redirect action: 'list'
+    def edita() {
+        def empresa = Empresa.get(params.id)
+        if (!empresa) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'empresa.label', default: 'Empresa'), params.id])
+            redirect action: 'lista'
             return
         }
 
-        [empresaInstance: empresaInstance]
+        [empresa: empresa]
     }
 
-    def edit() {
-		switch (request.method) {
-		case 'GET':
-	        def empresaInstance = Empresa.get(params.id)
-	        if (!empresaInstance) {
-	            flash.message = message(code: 'default.not.found.message', args: [message(code: 'empresa.label', default: 'Empresa'), params.id])
-	            redirect action: 'list'
-	            return
-	        }
+    def actualiza() {
+        def empresa = Empresa.get(params.id)
+        if (!empresa) {
+            flash.message = message(code: 'default.not.found.message', args: [message(code: 'empresa.label', default: 'Empresa'), params.id])
+            redirect action: 'lista'
+            return
+        }
 
-	        [empresaInstance: empresaInstance]
-			break
-		case 'POST':
-	        def empresaInstance = Empresa.get(params.id)
-	        if (!empresaInstance) {
-	            flash.message = message(code: 'default.not.found.message', args: [message(code: 'empresa.label', default: 'Empresa'), params.id])
-	            redirect action: 'list'
-	            return
-	        }
+        if (params.version) {
+            def version = params.version.toLong()
+            if (empresa.version > version) {
+                empresa.errors.rejectValue('version', 'default.optimistic.locking.failure',
+                          [message(code: 'empresa.label', default: 'Empresa')] as Object[],
+                          "Another user has updated this Empresa while you were editing")
+                render view: 'edita', model: [empresa: empresa]
+                return
+            }
+        }
 
-	        if (params.version) {
-	            def version = params.version.toLong()
-	            if (empresaInstance.version > version) {
-	                empresaInstance.errors.rejectValue('version', 'default.optimistic.locking.failure',
-	                          [message(code: 'empresa.label', default: 'Empresa')] as Object[],
-	                          "Another user has updated this Empresa while you were editing")
-	                render view: 'edit', model: [empresaInstance: empresaInstance]
-	                return
-	            }
-	        }
+        empresa.properties = params
 
-	        empresaInstance.properties = params
+        try {
+            empresa.save(flush:true)
+        } catch(ValidationException e) {
+            render view: 'nueva', model: [empresa: empresa]
+            return
+        }
 
-	        if (!empresaInstance.save(flush: true)) {
-	            render view: 'edit', model: [empresaInstance: empresaInstance]
-	            return
-	        }
-
-			flash.message = message(code: 'default.updated.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresaInstance.id])
-	        redirect action: 'show', id: empresaInstance.id
-			break
-		}
+        flash.message = message(code: 'default.updated.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
+        redirect action: 'ver', id: empresa.id
     }
 
     def delete() {
-        def empresaInstance = Empresa.get(params.id)
-        if (!empresaInstance) {
+        def empresa = Empresa.get(params.id)
+        if (!empresa) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'empresa.label', default: 'Empresa'), params.id])
-            redirect action: 'list'
+            redirect action: 'lista'
             return
         }
 
         try {
-            empresaInstance.delete(flush: true)
-			flash.message = message(code: 'default.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), params.id])
-            redirect action: 'list'
+            empresa.delete(flush: true)
+			flash.message = message(code: 'default2.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
+            redirect action: 'lista'
         }
         catch (DataIntegrityViolationException e) {
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), params.id])
-            redirect action: 'show', id: params.id
+			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
+            redirect action: 'ver', id: params.id
         }
     }
 }

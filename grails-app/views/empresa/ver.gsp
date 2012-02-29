@@ -1,4 +1,3 @@
-
 <%@ page import="com.fruiz.tankmon.Empresa" %>
 <!doctype html>
 <html>
@@ -8,102 +7,73 @@
 		<title><g:message code="default.show.label" args="[entityName]" /></title>
 	</head>
 	<body>
-		<div class="row-fluid">
-			
-			<div class="span3">
-				<div class="well">
-					<ul class="nav nav-list">
-						<li class="nav-header">${entityName}</li>
-						<li>
-							<g:link class="list" action="list">
-								<i class="icon-list"></i>
-								<g:message code="default.list.label" args="[entityName]" />
-							</g:link>
-						</li>
-						<li>
-							<g:link class="create" action="create">
-								<i class="icon-plus"></i>
-								<g:message code="default.create.label" args="[entityName]" />
-							</g:link>
-						</li>
-					</ul>
-				</div>
-			</div>
-			
-			<div class="span9">
+        <content tag="nav">
+        <ul class="nav">
+            <li><a href="${createLink(uri: '/')}"><g:message code='default.home.label' /></a></li>
+            <li class="active"><a href="${createLink(uri: '/empresa')}"><g:message code='empresa.list.label' /></a></li>
+            <li><a href="${createLink(uri: '/usuario')}"><g:message code='usuario.list.label' /></a></li>
+        </ul>
+        </content>
+        <div class="page-header">
+            <h1><g:message code="default.show.label" args="[entityName]" /></h1>
+        </div>
 
-				<div class="page-header">
-					<h1><g:message code="default.show.label" args="[entityName]" /></h1>
-				</div>
+        <div class="row-fluid">
+            <div class="well">
+                <g:link class="btn btn-primary" action="lista">
+                    <i class="icon-list icon-white"></i>
+                    <g:message code="empresa.list.label" />
+                </g:link>
+                <g:link class="btn btn-primary" action="nueva">
+                    <i class="icon-plus icon-white"></i>
+                    <g:message code="default2.create.label" args="[entityName]" />
+                </g:link>
+            </div>
+        </div>
 
-				<g:if test="${flash.message}">
-				<bootstrap:alert class="alert-info">${flash.message}</bootstrap:alert>
-				</g:if>
-
-				<dl>
-				
-					<g:if test="${empresaInstance?.nombre}">
-						<dt><g:message code="empresa.nombre.label" default="Nombre" /></dt>
-						
-							<dd><g:fieldValue bean="${empresaInstance}" field="nombre"/></dd>
-						
-					</g:if>
-				
-					<g:if test="${empresaInstance?.razonSocial}">
-						<dt><g:message code="empresa.razonSocial.label" default="Razon Social" /></dt>
-						
-							<dd><g:fieldValue bean="${empresaInstance}" field="razonSocial"/></dd>
-						
-					</g:if>
-				
-					<g:if test="${empresaInstance?.rfc}">
-						<dt><g:message code="empresa.rfc.label" default="Rfc" /></dt>
-						
-							<dd><g:fieldValue bean="${empresaInstance}" field="rfc"/></dd>
-						
-					</g:if>
-				
-					<g:if test="${empresaInstance?.sitioWeb}">
-						<dt><g:message code="empresa.sitioWeb.label" default="Sitio Web" /></dt>
-						
-							<dd><g:fieldValue bean="${empresaInstance}" field="sitioWeb"/></dd>
-						
-					</g:if>
-				
-					<g:if test="${empresaInstance?.maximoUsuarios}">
-						<dt><g:message code="empresa.maximoUsuarios.label" default="Maximo Usuarios" /></dt>
-						
-							<dd><g:fieldValue bean="${empresaInstance}" field="maximoUsuarios"/></dd>
-						
-					</g:if>
-				
-					<g:if test="${empresaInstance?.usuarios}">
-						<dt><g:message code="empresa.usuarios.label" default="Usuarios" /></dt>
-						
-							<g:each in="${empresaInstance.usuarios}" var="u">
-							<dd><g:link controller="usuario" action="show" id="${u.id}">${u?.encodeAsHTML()}</g:link></dd>
-							</g:each>
-						
-					</g:if>
-				
-				</dl>
-
-				<g:form>
-					<g:hiddenField name="id" value="${empresaInstance?.id}" />
-					<div class="form-actions">
-						<g:link class="btn" action="edit" id="${empresaInstance?.id}">
-							<i class="icon-pencil"></i>
-							<g:message code="default.button.edit.label" default="Edit" />
-						</g:link>
-						<button class="btn btn-danger" type="submit" name="_action_delete">
-							<i class="icon-trash icon-white"></i>
-							<g:message code="default.button.delete.label" default="Delete" />
-						</button>
-					</div>
-				</g:form>
-
-			</div>
-
-		</div>
+        <div class="row-fluid">
+            <g:if test="${flash.message}">
+                    <bootstrap:alert class="alert-info fade in">${flash.message}</bootstrap:alert>
+            </g:if>
+        </div>
+        <div class="row-fluid">
+            <g:if test="${empresa?.nombre}">
+                    <h4><g:message code="nombre.label" /></h4>
+                    <h3><g:fieldValue bean="${empresa}" field="nombre"/></h3>
+            </g:if>
+        </div>
+        <div class="row-fluid">
+            <g:if test="${empresa?.razonSocial}">
+                    <h4><g:message code="razonSocial.label" /></h4>
+                    <h3><g:fieldValue bean="${empresa}" field="razonSocial"/></h3>
+            </g:if>
+        </div>
+        <div class="row-fluid">
+            <g:if test="${empresa?.rfc}">
+                    <h4><g:message code="rfc.label" /></h4>
+                    <h3><g:fieldValue bean="${empresa}" field="rfc"/></h3>
+            </g:if>
+        </div>
+        <div class="row-fluid">
+            <g:if test="${empresa?.maximoUsuarios}">
+                    <h4><g:message code="maximoUsuarios.label" /></h4>
+                    <h3><g:fieldValue bean="${empresa}" field="maximoUsuarios"/></h3>
+            </g:if>
+        </div>
+        <div class="row-fluid">
+            <g:form>
+                <g:hiddenField name="id" value="${empresa?.id}" />
+                <div class="well">
+                    <g:link class="btn" action="edit" id="${empresa?.id}">
+                        <i class="icon-pencil"></i>
+                        <g:message code="default.button.edit.label" default="Edit" />
+                    </g:link>
+                    <button class="btn btn-danger" type="submit" name="_action_delete" onclick="return confirm('<g:message code="default.button.delete.confirm.message" />');">
+                        <i class="icon-trash icon-white"></i>
+                        <g:message code="default.button.delete.label" default="Delete" />
+                    </button>
+                </div>
+            </g:form>
+        </div>
 	</body>
 </html>
