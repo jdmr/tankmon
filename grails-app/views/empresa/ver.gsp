@@ -64,11 +64,11 @@
             <g:form>
                 <g:hiddenField name="id" value="${empresa?.id}" />
                 <div class="well">
-                    <g:link class="btn" action="edit" id="${empresa?.id}">
+                    <g:link class="btn btn-large" action="edita" id="${empresa?.id}">
                         <i class="icon-pencil"></i>
                         <g:message code="default.button.edit.label" default="Edit" />
                     </g:link>
-                    <button class="btn btn-danger" type="submit" name="_action_delete" onclick="return confirm('<g:message code="default.button.delete.confirm.message" />');">
+                    <button class="btn btn-large btn-danger" type="submit" name="_action_elimina" onclick="return confirm('<g:message code="default.button.delete.confirm.message" />');">
                         <i class="icon-trash icon-white"></i>
                         <g:message code="default.button.delete.label" default="Delete" />
                     </button>

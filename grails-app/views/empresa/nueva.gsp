@@ -50,7 +50,6 @@
                     </p>
                 </g:form>
 				
-
 		</div>
         <r:script>
         $(document).ready(function(){

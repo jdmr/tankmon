@@ -5,8 +5,6 @@ import org.springframework.dao.DataIntegrityViolationException
 
 class EmpresaController {
 
-    static allowedMethods = [crea: ['POST'], actualiza: ['POST'], delete: 'POST']
-
     def index() {
         redirect action: 'lista', params: params
     }
@@ -46,6 +44,7 @@ class EmpresaController {
     }
 
     def edita() {
+        log.debug("Editando empresa $params.id")
         def empresa = Empresa.get(params.id)
         if (!empresa) {
             flash.message = message(code: 'default.not.found.message', args: [message(code: 'empresa.label', default: 'Empresa'), params.id])
@@ -84,11 +83,11 @@ class EmpresaController {
             return
         }
 
-        flash.message = message(code: 'default.updated.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
+        flash.message = message(code: 'default2.updated.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
         redirect action: 'ver', id: empresa.id
     }
 
-    def delete() {
+    def elimina() {
         def empresa = Empresa.get(params.id)
         if (!empresa) {
 			flash.message = message(code: 'default.not.found.message', args: [message(code: 'empresa.label', default: 'Empresa'), params.id])

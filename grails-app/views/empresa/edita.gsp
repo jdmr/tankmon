@@ -7,69 +7,54 @@
 		<title><g:message code="default.edit.label" args="[entityName]" /></title>
 	</head>
 	<body>
+        <content tag="nav">
+        <ul class="nav">
+            <li><a href="${createLink(uri: '/')}"><g:message code='default.home.label' /></a></li>
+            <li class="active"><a href="${createLink(uri: '/empresa')}"><g:message code='empresa.list.label' /></a></li>
+            <li><a href="${createLink(uri: '/usuario')}"><g:message code='usuario.list.label' /></a></li>
+        </ul>
+        </content>
 		<div class="row-fluid">
 
-			<div class="span3">
-				<div class="well">
-					<ul class="nav nav-list">
-						<li class="nav-header">${entityName}</li>
-						<li>
-							<g:link class="list" action="list">
-								<i class="icon-list"></i>
-								<g:message code="default.list.label" args="[entityName]" />
-							</g:link>
-						</li>
-						<li>
-							<g:link class="create" action="create">
-								<i class="icon-plus"></i>
-								<g:message code="default.create.label" args="[entityName]" />
-							</g:link>
-						</li>
-					</ul>
-				</div>
-			</div>
-			
-			<div class="span9">
-
 				<div class="page-header">
-					<h1><g:message code="default.edit.label" args="[entityName]" /></h1>
+					<h1><g:message code="default2.create.label" args="[entityName]" /></h1>
 				</div>
 
 				<g:if test="${flash.message}">
-				<bootstrap:alert class="alert-info">${flash.message}</bootstrap:alert>
+                    <bootstrap:alert class="alert-info fade in">${flash.message}</bootstrap:alert>
 				</g:if>
 
-				<g:hasErrors bean="${empresaInstance}">
-				<bootstrap:alert class="alert-error">
-				<ul>
-					<g:eachError bean="${empresaInstance}" var="error">
-					<li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
-					</g:eachError>
-				</ul>
-				</bootstrap:alert>
+				<g:hasErrors bean="${empresa}">
+                    <bootstrap:alert class="alert-error fade in">
+                        <ul>
+                            <g:eachError bean="${empresa}" var="error">
+                            <li <g:if test="${error in org.springframework.validation.FieldError}">data-field-id="${error.field}"</g:if>><g:message error="${error}"/></li>
+                            </g:eachError>
+                        </ul>
+                    </bootstrap:alert>
 				</g:hasErrors>
 
-				<fieldset>
-					<g:form class="form-horizontal" action="edit" id="${empresaInstance?.id}" >
-						<g:hiddenField name="version" value="${empresaInstance?.version}" />
-						<fieldset>
-							<f:all bean="empresaInstance"/>
-							<div class="form-actions">
-								<button type="submit" class="btn btn-primary">
-									<i class="icon-ok icon-white"></i>
-									<g:message code="default.button.update.label" default="Update" />
-								</button>
-								<button type="submit" class="btn btn-danger" name="_action_delete" formnovalidate>
-									<i class="icon-trash icon-white"></i>
-									<g:message code="default.button.delete.label" default="Delete" />
-								</button>
-							</div>
-						</fieldset>
-					</g:form>
-				</fieldset>
-
-			</div>
-
+                <g:form action="actualiza" id="${empresa?.id}">
+					<g:hiddenField name="version" value="${empresa?.version}" />
+				    <fieldset>
+                        <g:render template="form"/>
+                    </fieldset>
+                    <p class="well" style="margin-top:10px;">
+                        <button type="submit" class="btn btn-large btn-primary">
+                            <i class="icon-ok icon-white"></i>
+                            <g:message code="default.button.update.label" />
+                        </button>
+                        <g:link class="btn btn-large" action="lista">
+                            <g:message code="default.button.cancel.label" />
+                        </g:link>
+                    </p>
+                </g:form>
+				
 		</div>
+        <r:script>
+        $(document).ready(function(){
+            $('input#nombre').focus();
+        });
+        </r:script>
 	</body>
 </html>
