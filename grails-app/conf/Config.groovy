@@ -102,7 +102,8 @@ log4j = {
 
     off    'grails.app.services.org.grails.plugin.resource',
            'grails.app.taglib.org.grails.plugin.resource',
-           'grails.app.resourceMappers.org.grails.plugin.resource'
+           'grails.app.resourceMappers.org.grails.plugin.resource',
+           'grails.app.services.grails.plugin.formfields'
 }
 
 // Added by the Joda-Time plugin:

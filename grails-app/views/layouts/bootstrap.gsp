@@ -40,12 +40,7 @@
 					<a class="brand" href="${createLink(uri: '/')}">TANKMON</a>
 
 					<div class="nav-collapse">
-						<ul class="nav">							
-							<li<%= request.forwardURI == "${createLink(uri: '/')}" ? ' class="active"' : '' %>><a href="${createLink(uri: '/')}">Inicio</a></li>
-							<g:each var="c" in="${grailsApplication.controllerClasses.sort { it.fullName } }">
-								<li<%= c.logicalPropertyName == controllerName ? ' class="active"' : '' %>><g:link controller="${c.logicalPropertyName}">${c.naturalName}</g:link></li>
-							</g:each>
-						</ul>
+                        <g:pageProperty  name="page.nav" />
 					</div>
 				</div>
 			</div>

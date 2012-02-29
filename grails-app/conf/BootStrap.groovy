@@ -19,9 +19,20 @@ class BootStrap {
         log.debug('Validando USUARIOS')
         def admin = UsuarioRol.findByRol(rolAdmin)
         if (!admin) {
+            def empresa = Empresa.findByNombre('BASE')
+            if (!empresa) {
+                empresa = new Empresa(
+                    nombre: 'BASE'
+                    , razonSocial: 'BASE'
+                    , rfc: 'BASE00000001'
+                ).save()
+            }
             admin = new Usuario(
                 username:'portal@um.edu.mx'
                 , password : 'admin'
+                , nombre:'Admin' 
+                , apellido:'User'
+                , empresa: empresa
             ).save()
 
             UsuarioRol.create(admin, rolAdmin, true)
