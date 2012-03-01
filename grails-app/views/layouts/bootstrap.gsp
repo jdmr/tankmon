@@ -41,7 +41,14 @@
 
 					<div class="nav-collapse">
                         <g:pageProperty  name="page.nav" />
+                        <sec:ifLoggedIn>
+                        <p class="navbar-text pull-right">
+                            Bienvenido <a href="${createLink(uri:'/perfil')}"><sec:username /></a>
+                            <a href="${createLink(uri:'/logout')}"><i class="icon-off icon-white"></i></a>
+                        </p>
+                        </sec:ifLoggedIn>
 					</div>
+
 				</div>
 			</div>
 		</nav>
@@ -52,7 +59,10 @@
 			<hr>
 
 			<footer>
-                <p class='pull-right'>&copy; <a href='http://www.fruiz.com'>FRuiz e Hijos</a> 2012</p>
+                <div class="row-fluid">
+                    <div class="span8"><p>&copy; <a href='http://www.fruiz.com'>FRuiz e Hijos</a> 2012</p></div>
+                    <div class="span4"><p class="pull-right"><a href="${createLink(uri:'/perfil')}">${session.empresa}</a></p></div>
+                </div>
 			</footer>
 		</div>
 

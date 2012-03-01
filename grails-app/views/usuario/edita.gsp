@@ -5,6 +5,7 @@
 		<meta name="layout" content="bootstrap">
 		<g:set var="entityName" value="${message(code: 'usuario.label', default: 'Usuario')}" />
 		<title><g:message code="default.edit.label" args="[entityName]" /></title>
+        <r:require module="jquery" />
 	</head>
 	<body>
         <content tag="nav">
@@ -17,7 +18,7 @@
 		<div class="row-fluid">
 
 				<div class="page-header">
-					<h1><g:message code="default.create.label" args="[entityName]" /></h1>
+					<h1><g:message code="default.edit.label" args="[entityName]" /></h1>
 				</div>
 
 				<g:if test="${flash.message}">
