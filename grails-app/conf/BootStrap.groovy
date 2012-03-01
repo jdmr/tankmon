@@ -28,10 +28,11 @@ class BootStrap {
                 ).save()
             }
             admin = new Usuario(
-                username:'portal@um.edu.mx'
+                username:'admin'
                 , password : 'admin'
                 , nombre:'Admin' 
                 , apellido:'User'
+                , correo:'portal@um.edu.mx'
                 , empresa: empresa
             ).save()
 

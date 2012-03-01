@@ -52,7 +52,7 @@
 			<hr>
 
 			<footer>
-                <p class='pull-right'>&copy; <a href='http://www.sistemashumanos.com'>Sistemas Humanos</a> 2012</p>
+                <p class='pull-right'>&copy; <a href='http://www.fruiz.com'>FRuiz e Hijos</a> 2012</p>
 			</footer>
 		</div>
 

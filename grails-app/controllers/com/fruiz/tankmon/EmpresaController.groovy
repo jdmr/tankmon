@@ -81,7 +81,7 @@ class EmpresaController {
         try {
             empresa.save(flush:true)
         } catch(ValidationException e) {
-            render view: 'nueva', model: [empresa: empresa]
+            render view: 'edita', model: [empresa: empresa]
             return
         }
 
@@ -101,8 +101,7 @@ class EmpresaController {
             empresa.delete(flush: true)
 			flash.message = message(code: 'default2.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
             redirect action: 'lista'
-        }
-        catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
 			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
             redirect action: 'ver', id: params.id
         }

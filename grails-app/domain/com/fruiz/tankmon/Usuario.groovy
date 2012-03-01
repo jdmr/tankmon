@@ -14,16 +14,18 @@ class Usuario implements Serializable {
     String apellido
     String puesto
     String telefono
+    String correo
 
     static belongsTo = [empresa: Empresa]
 
 	static constraints = {
-		username blank: false, unique: true, email: true
+		username blank: false, unique: true
 		password blank: false
         nombre blank: false, maxSize: 64
         apellido blank: false, maxSize: 64
         puesto nullable: true, maxSize: 128
         telefono nullable: true, maxSize: 32
+        correo blank: false, maxSize: 128, email: true
 	}
 
 	static mapping = {

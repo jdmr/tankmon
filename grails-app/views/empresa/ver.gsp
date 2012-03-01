@@ -33,33 +33,42 @@
 
         <div class="row-fluid">
             <g:if test="${flash.message}">
-                    <bootstrap:alert class="alert-info fade in">${flash.message}</bootstrap:alert>
+                <bootstrap:alert class="alert-info fade in">${flash.message}</bootstrap:alert>
             </g:if>
         </div>
+
         <div class="row-fluid">
             <g:if test="${empresa?.nombre}">
-                    <h4><g:message code="nombre.label" /></h4>
-                    <h3><g:fieldValue bean="${empresa}" field="nombre"/></h3>
+                <h4><g:message code="nombre.label" /></h4>
+                <h3><g:fieldValue bean="${empresa}" field="nombre"/></h3>
+                <p></p>
             </g:if>
         </div>
+
         <div class="row-fluid">
             <g:if test="${empresa?.razonSocial}">
-                    <h4><g:message code="razonSocial.label" /></h4>
-                    <h3><g:fieldValue bean="${empresa}" field="razonSocial"/></h3>
+                <h4><g:message code="razonSocial.label" /></h4>
+                <h3><g:fieldValue bean="${empresa}" field="razonSocial"/></h3>
+                <p></p>
             </g:if>
         </div>
+
         <div class="row-fluid">
             <g:if test="${empresa?.rfc}">
-                    <h4><g:message code="rfc.label" /></h4>
-                    <h3><g:fieldValue bean="${empresa}" field="rfc"/></h3>
+                <h4><g:message code="rfc.label" /></h4>
+                <h3><g:fieldValue bean="${empresa}" field="rfc"/></h3>
+                <p></p>
             </g:if>
         </div>
+
         <div class="row-fluid">
             <g:if test="${empresa?.maximoUsuarios}">
-                    <h4><g:message code="maximoUsuarios.label" /></h4>
-                    <h3><g:fieldValue bean="${empresa}" field="maximoUsuarios"/></h3>
+                <h4><g:message code="maximoUsuarios.label" /></h4>
+                <h3><g:fieldValue bean="${empresa}" field="maximoUsuarios"/></h3>
+                <p></p>
             </g:if>
         </div>
+
         <div class="row-fluid">
             <g:form>
                 <g:hiddenField name="id" value="${empresa?.id}" />

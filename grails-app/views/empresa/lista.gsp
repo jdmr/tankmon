@@ -20,10 +20,6 @@
             <h1><g:message code="empresa.list.label" /></h1>
         </div>
 
-        <g:if test="${flash.message}">
-        <bootstrap:alert class="alert-info fade in">${flash.message}</bootstrap:alert>
-        </g:if>
-        
         <g:form action="lista" method="post">
             <div class="row-fluid">
                 <div class="well">
@@ -38,6 +34,11 @@
                     </button>
                 </div>
             </div>
+
+            <g:if test="${flash.message}">
+                <bootstrap:alert class="alert-info fade in">${flash.message}</bootstrap:alert>
+            </g:if>
+            
             <div class="row-fluid">
                 <table id="lista" class="table table-striped">
                     <thead>
