@@ -8,14 +8,13 @@ import org.springframework.security.authentication.TestingAuthenticationToken
 
 class BaseIntegrationTest extends GroovyTestCase {
 
-    def authenticateAdmin() {
+    def authenticateAdmin(empresa) {
         def credentials = 'test'
-        def user = new Usuario(
-                username:'portal@um.edu.mx'
-                ,password:credentials
-            )
+        def user = Usuario.findByUsername('admin')
+        user.empresa = empresa
         def authorities = [new GrantedAuthorityImpl('ROLE_ADMIN')]
         def principal = new GrailsUser(user.username,credentials,true,true,true,true,authorities,1)
+        user.save()
         authenticate(principal,credentials,authorities)
     }
 
