@@ -11,6 +11,7 @@
             <li class="active"><a href="${createLink(uri: '/')}"><g:message code='default.home.label' /></a></li>
             <li><a href="${createLink(uri: '/empresa')}"><g:message code='empresa.list.label' /></a></li>
             <li><a href="${createLink(uri: '/usuario')}"><g:message code='usuario.list.label' /></a></li>
+            <li><a href="${createLink(uri: '/tanque')}"><g:message code='tanque.list.label' /></a></li>
         </ul>
         </content>
 		<div class="row-fluid">

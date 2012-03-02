@@ -31,6 +31,7 @@ class TanqueControllerTests extends BaseIntegrationTest {
                 , serie : "TEST--$i"
                 , fechaFabricacion : new Date()
                 , producto : "TEST--$i"
+                , unidades : "Lts"
                 , tipo : "TEST--$i"
                 , empresa : empresa
             )
@@ -64,6 +65,7 @@ class TanqueControllerTests extends BaseIntegrationTest {
         controller.params.serie = 'TEST--1'
         controller.params.fechaFabricacion = new Date()
         controller.params.producto = 'TEST--0000001'
+        controller.params.unidades = 'Lts'
         controller.params.tipo = 'TEST--1'
         controller.crea()
         assert controller.response.redirectedUrl.startsWith('/tanque/ver')
@@ -84,6 +86,7 @@ class TanqueControllerTests extends BaseIntegrationTest {
             , serie : 'TEST--1'
             , fechaFabricacion : new Date()
             , producto : 'TEST--1'
+            , unidades : 'Lts'
             , tipo : 'TEST--1'
             , empresa : empresa
         ).save()
@@ -126,6 +129,7 @@ class TanqueControllerTests extends BaseIntegrationTest {
             , serie : 'TEST--1'
             , fechaFabricacion : new Date()
             , producto : 'TEST--1'
+            , unidades : 'Lts'
             , tipo : 'TEST--1'
             , empresa : empresa
         ).save()

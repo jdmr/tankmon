@@ -10,6 +10,7 @@ class Tanque implements Serializable {
     BigDecimal profundo = new BigDecimal('0')
     BigDecimal diametro = new BigDecimal('0')
     String producto
+    String unidades = "Lts"
     BigDecimal capacidadLleno = new BigDecimal('0')
     BigDecimal capacidadVacio = new BigDecimal('0')
     String tipo
@@ -20,6 +21,7 @@ class Tanque implements Serializable {
         asignacion blank: false, maxSize: 64
         serie blank: false, maxSize: 64, unique: true
         producto blank: false, maxSize: 64
+        unidades blank: false, maxSize: 64
         tipo nullable: true, maxSize: 64
     }
 
