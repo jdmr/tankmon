@@ -128,7 +128,7 @@ class EmpresaController {
                             }
                         }
                     }
-                    empresa.usuarios.clear()
+                    empresa.usuarios?.clear()
                     for(usuario in usuariosParaEliminar) {
                         usuarios.remove(usuario)
                         UsuarioRol.removeAll(usuario)
