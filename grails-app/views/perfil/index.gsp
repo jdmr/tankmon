@@ -57,7 +57,7 @@
                             <i class="icon-ok icon-white"></i>
                             <g:message code="default.button.update.label" />
                         </button>
-                        <g:link class="btn btn-large" action="lista">
+                        <g:link class="btn btn-large" uri="/">
                             <g:message code="default.button.cancel.label" />
                         </g:link>
                     </p>

@@ -28,11 +28,13 @@ class UsuarioController {
     def crea() {
         def usuario = new Usuario(params)
         try {
-            usuario.empresa = springSecurityService.currentUser.empresa
-            usuario.save(flush:true)
-            def roles = asignaRoles(params)
-            for(rol in roles) {
-                UsuarioRol.create(usuario, rol, false)
+            Usuario.withTransaction {
+                usuario.empresa = springSecurityService.currentUser.empresa
+                usuario.save(flush:true)
+                def roles = asignaRoles(params)
+                for(rol in roles) {
+                    UsuarioRol.create(usuario, rol, false)
+                }
             }
         } catch(ValidationException e) {
             def roles = obtineRoles(null)
@@ -91,12 +93,14 @@ class UsuarioController {
         usuario.properties = params
 
         try {
-            usuario.empresa = springSecurityService.currentUser.empresa
-            usuario.save(flush:true)
-            UsuarioRol.removeAll(usuario)
-            def roles = asignaRoles(params)
-            for(rol in roles) {
-                UsuarioRol.create(usuario, rol, false)
+            Usuario.withTransaction {
+                usuario.empresa = springSecurityService.currentUser.empresa
+                usuario.save(flush:true)
+                UsuarioRol.removeAll(usuario)
+                def roles = asignaRoles(params)
+                for(rol in roles) {
+                    UsuarioRol.create(usuario, rol, false)
+                }
             }
         } catch(ValidationException e) {
             def roles = obtieneRoles(usuario)
@@ -118,10 +122,12 @@ class UsuarioController {
 
         try {
             if (usuario != springSecurityService.currentUser) {
-                UsuarioRol.removeAll(usuario)
-                usuario.delete(flush: true)
-                flash.message = message(code: 'default.deleted.message', args: [message(code: 'usuario.label', default: 'Usuario'), usuario.username])
-                redirect action: 'lista'
+                Usuario.withTransaction {
+                    UsuarioRol.removeAll(usuario)
+                    usuario.delete(flush: true)
+                    flash.message = message(code: 'default.deleted.message', args: [message(code: 'usuario.label', default: 'Usuario'), usuario.username])
+                    redirect action: 'lista'
+                }
             } else {
                 flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'usuario.label', default: 'Usuario'), usuario.username])
                 redirect action: 'ver', id: params.id

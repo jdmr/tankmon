@@ -7,6 +7,8 @@ import org.springframework.dao.DataIntegrityViolationException
 @Secured(['ROLE_ADMIN'])
 class EmpresaController {
 
+    def springSecurityService
+
     def index() {
         redirect action: 'lista', params: params
     }
@@ -24,7 +26,13 @@ class EmpresaController {
     def crea() {
         def empresa = new Empresa(params)
         try {
-            empresa.save(flush:true)
+            Empresa.withTransaction {
+                empresa.save(flush:true)
+                def usuario = springSecurityService.currentUser
+                usuario.empresa = empresa
+                usuario.save(flush:true)
+                session.empresa = empresa.nombre
+            }
         } catch(ValidationException e) {
             render view: 'nueva', model: [empresa: empresa]
             return
@@ -79,7 +87,13 @@ class EmpresaController {
         empresa.properties = params
 
         try {
-            empresa.save(flush:true)
+            Empresa.withTransaction {
+                empresa.save(flush:true)
+                def usuario = springSecurityService.currentUser
+                usuario.empresa = empresa
+                usuario.save(flush:true)
+                session.empresa = empresa.nombre
+            }
         } catch(ValidationException e) {
             render view: 'edita', model: [empresa: empresa]
             return
@@ -98,9 +112,36 @@ class EmpresaController {
         }
 
         try {
-            empresa.delete(flush: true)
-			flash.message = message(code: 'default2.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
-            redirect action: 'lista'
+            if (Empresa.count() > 1) {
+                Empresa.withTransaction {
+                    def otraEmpresa = Empresa.findByIdNot(empresa.id)
+                    def rolAdmin = Rol.findByAuthority('ROLE_ADMIN')
+                    def usuarios = empresa.usuarios
+                    def usuariosParaEliminar = []
+                    for(usuario in usuarios) {
+                        for(rol in usuario.authorities) {
+                            if (rol == rolAdmin) {
+                                usuario.empresa = otraEmpresa
+                                usuario.save(flush:true)
+                            } else {
+                                usuariosParaEliminar << usuario
+                            }
+                        }
+                    }
+                    empresa.usuarios.clear()
+                    for(usuario in usuariosParaEliminar) {
+                        usuarios.remove(usuario)
+                        UsuarioRol.removeAll(usuario)
+                        usuario.delete(flush: true)
+                    }
+                    empresa.delete(flush: true)
+                    flash.message = message(code: 'default2.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
+                    redirect action: 'lista'
+                }
+            } else {
+                flash.message = message(code: 'ultima.empresa.no.borrada.message', args: [empresa.nombre])
+                redirect action: 'lista'
+            }
         } catch (DataIntegrityViolationException e) {
 			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
             redirect action: 'ver', id: params.id
