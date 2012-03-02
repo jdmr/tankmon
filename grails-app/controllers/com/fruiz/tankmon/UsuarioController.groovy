@@ -21,7 +21,8 @@ class UsuarioController {
 
     def nuevo() {
         def usuario = new Usuario(params)
-        [usuario: usuario]
+        def roles = obtieneRoles(null)
+        [usuario: usuario, roles: roles]
     }
 
     def crea() {
@@ -29,8 +30,13 @@ class UsuarioController {
         try {
             usuario.empresa = springSecurityService.currentUser.empresa
             usuario.save(flush:true)
+            def roles = asignaRoles(params)
+            for(rol in roles) {
+                UsuarioRol.create(usuario, rol, false)
+            }
         } catch(ValidationException e) {
-            render view: 'nuevo', model: [usuario: usuario]
+            def roles = obtineRoles(null)
+            render view: 'nuevo', model: [usuario: usuario, roles: roles]
             return
         }
 
@@ -58,7 +64,8 @@ class UsuarioController {
             return
         }
 
-        [usuario: usuario]
+        def roles = obtieneRoles(usuario)
+        [usuario: usuario, roles: roles]
     }
 
     def actualiza() {
@@ -75,7 +82,8 @@ class UsuarioController {
                 usuario.errors.rejectValue('version', 'default.optimistic.locking.failure',
                           [message(code: 'usuario.label', default: 'Usuario')] as Object[],
                           "Another user has updated this Usuario while you were editing")
-                render view: 'edita', model: [usuario: usuario]
+                def roles = obtieneRoles(usuario)
+                render view: 'edita', model: [usuario: usuario, roles: roles]
                 return
             }
         }
@@ -85,8 +93,14 @@ class UsuarioController {
         try {
             usuario.empresa = springSecurityService.currentUser.empresa
             usuario.save(flush:true)
+            UsuarioRol.removeAll(usuario)
+            def roles = asignaRoles(params)
+            for(rol in roles) {
+                UsuarioRol.create(usuario, rol, false)
+            }
         } catch(ValidationException e) {
-            render view: 'edita', model: [usuario: usuario]
+            def roles = obtieneRoles(usuario)
+            render view: 'edita', model: [usuario: usuario, roles: roles]
             return
         }
 
@@ -104,6 +118,7 @@ class UsuarioController {
 
         try {
             if (usuario != springSecurityService.currentUser) {
+                UsuarioRol.removeAll(usuario)
                 usuario.delete(flush: true)
                 flash.message = message(code: 'default.deleted.message', args: [message(code: 'usuario.label', default: 'Usuario'), usuario.username])
                 redirect action: 'lista'
@@ -115,5 +130,33 @@ class UsuarioController {
 			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'usuario.label', default: 'Usuario'), usuario.username])
             redirect action: 'ver', id: params.id
         }
+    }
+
+    def obtieneRoles(usuario) {
+        log.debug "Obteniendo lista de roles"
+        def roles = Rol.list()
+
+        roles.sort { r1, r2 ->
+            r1.authority <=> r2.authority
+        }
+        Set userRoleNames = []
+        for (role in usuario?.authorities) {
+            userRoleNames << role.authority
+        }
+        LinkedHashMap<Rol, Boolean> roleMap = [:]
+        for (role in roles) {
+            roleMap[(role)] = userRoleNames.contains(role.authority)
+        }
+        return roleMap
+    }
+
+    def asignaRoles(params) {
+        def roles = [] as Set
+        if (params.ROLE_ADMIN) {
+            roles << Rol.findByAuthority('ROLE_ADMIN')
+        } else {
+            roles << Rol.findByAuthority('ROLE_CLIENTE')
+        }
+        return roles
     }
 }

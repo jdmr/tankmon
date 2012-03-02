@@ -38,61 +38,73 @@
             </g:if>
         </div>
 
-        <div class="row-fluid">
-            <g:if test="${usuario?.username}">
+        <g:if test="${usuario?.username}">
+            <div class="row-fluid">
                 <h4><g:message code="username.label" /></h4>
                 <h3><g:fieldValue bean="${usuario}" field="username"/></h3>
                 <p></p>
-            </g:if>
-        </div>
+            </div>
+        </g:if>
         
-        <div class="row-fluid">
-            <g:if test="${usuario?.nombre}">
+        <g:if test="${usuario?.nombre}">
+            <div class="row-fluid">
                 <h4><g:message code="nombre.label" /></h4>
                 <h3><g:fieldValue bean="${usuario}" field="nombre"/></h3>
                 <p></p>
-            </g:if>
-        </div>
+            </div>
+        </g:if>
         
-        <div class="row-fluid">
-            <g:if test="${usuario?.apellido}">
+        <g:if test="${usuario?.apellido}">
+            <div class="row-fluid">
                 <h4><g:message code="apellido.label" /></h4>
                 <h3><g:fieldValue bean="${usuario}" field="apellido"/></h3>
                 <p></p>
-            </g:if>
-        </div>
+            </div>
+        </g:if>
 
-        <div class="row-fluid">
-            <g:if test="${usuario?.puesto}">
+        <g:if test="${usuario?.puesto}">
+            <div class="row-fluid">
                 <h4><g:message code="puesto.label" /></h4>
                 <h3><g:fieldValue bean="${usuario}" field="puesto"/></h3>
                 <p></p>
-            </g:if>
-        </div>
+            </div>
+        </g:if>
 
-        <div class="row-fluid">
-            <g:if test="${usuario?.telefono}">
+        <g:if test="${usuario?.telefono}">
+            <div class="row-fluid">
                 <h4><g:message code="telefono.label" /></h4>
                 <h3><g:fieldValue bean="${usuario}" field="telefono"/></h3>
                 <p></p>
-            </g:if>
-        </div>
+            </div>
+        </g:if>
 
-        <div class="row-fluid">
-            <g:if test="${usuario?.correo}">
+        <g:if test="${usuario?.correo}">
+            <div class="row-fluid">
                 <h4><g:message code="correo.label" /></h4>
                 <h3><g:fieldValue bean="${usuario}" field="correo"/></h3>
                 <p></p>
-            </g:if>
-        </div>
+            </div>
+        </g:if>
 
-        <div class="row-fluid">
-            <g:if test="${usuario?.empresa}">
+        <g:if test="${usuario?.empresa}">
+            <div class="row-fluid">
                 <h4><g:message code="empresa.label" /></h4>
                 <h3><g:fieldValue bean="${usuario}" field="empresa.nombre"/></h3>
                 <p></p>
-            </g:if>
-        </div>
+            </div>
+        </g:if>
+
+        <g:if test="${usuario?.authorities}">
+            <div class="row-fluid">
+                <h4><g:message code="authorities.label" /></h4>
+                <h3>
+                    <g:each var="entry" in="${usuario?.authorities}">
+                        <g:checkBox disabled="true" name="${entry.authority}" value="${entry.id}"/> <g:message code="${entry.authority}" /><br/>
+                    </g:each>
+                </h3>
+                <p></p>
+            </div>
+        </g:if>
 
         <div class="row-fluid">
             <g:form>
