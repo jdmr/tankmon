@@ -21,20 +21,23 @@
             <h1>Tanques por Asignar</h1>
         </div>
 
-        <g:form action="lista" method="post">
+        <g:form action="asignables" method="post">
             <div class="row-fluid">
                 <div class="well">
-                    <g:link class="btn btn-primary" action="lista">
-                        <i class="icon-list icon-white"></i> Lista
+                    <g:link class="btn" action="lista">
+                        <i class="icon-list"></i> Lista
                     </g:link>
                     <g:link class="btn btn-primary" action="nuevo">
                         <i class="icon-plus icon-white"></i>
                         <g:message code="default.create.label" args="[entityName]" />
                     </g:link>
                     <input name="filtro" type="text" class="input-large search-query" value="${params.filtro}">
-                    <button type="submit" class="btn">
+                    <button type="submit" class="btn" name="_action_asignables">
                         <i class="icon-search"></i>
                         <g:message code="default.button.search.label" default="Search" />
+                    </button>
+                    <button class="btn btn-warning" type="submit" name="_action_asignables" onclick="return confirm('¿Está seguro que desea asignar estos tanques a ${session.empresa}?');">
+                        <i class="icon-plus icon-white"></i> Guardar Asignaciones
                     </button>
                 </div>
             </div>
@@ -61,6 +64,8 @@
                             <g:sortableColumn property="tipo" title="${message(code: 'tipo.label')}" />
                         
                             <th><g:message code="empresa.label" /></th>
+
+                            <th style='text-align:center;'>Asignar</th>
                         
                         </tr>
                     </thead>
@@ -81,6 +86,8 @@
                             <td>${fieldValue(bean: tanque, field: "tipo")}</td>
                         
                             <td>${fieldValue(bean: tanque, field: "empresa.nombre")}</td>
+
+                            <td style='text-align:center;'><g:checkBox name="asignaciones" value="${tanque.id}" checked="false"/></td>
                         
                         </tr>
                     </g:each>
@@ -93,7 +100,7 @@
             </div>
         </g:form>
         <content tag="scripts">
-        <script src="${createLink(uri:'/js/lista.js')}" type="text/javascript" ></script>
+        <script src="${createLink(uri:'/js/lista2.js')}" type="text/javascript" ></script>
         </content>
 	</body>
 </html>

@@ -16,7 +16,19 @@ class TanqueController {
     def lista() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def empresa = springSecurityService.currentUser.empresa
-        [tanques: Tanque.findAllByEmpresa(empresa, params), totalDeTanques: Tanque.countByEmpresa(empresa)]
+
+        def tanques
+        def cantidad
+        if (params.filtro) {
+            def filtro = params.filtro
+            tanques = Tanque.buscaPorEmpresa(empresa).buscaPorFiltro(filtro).list(params)
+            cantidad = Tanque.buscaPorEmpresa(empresa).buscaPorFiltro(filtro).count()
+        } else {
+            tanques = Tanque.findAllByEmpresa(empresa, params)
+            cantidad = Tanque.countByEmpresa(empresa)
+        }
+
+        [tanques: tanques, totalDeTanques: cantidad]
     }
 
     def nuevo() {
@@ -117,9 +129,44 @@ class TanqueController {
         }
     }
 
+    @Secured(['ROLE_ADMIN'])
     def asignables() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def empresa = Empresa.findByNombre('CENTERON')
-        [tanques: Tanque.findAllByEmpresa(empresa, params), totalDeTanques: Tanque.countByEmpresa(empresa)]
+
+        for(tanqueId in params.asignaciones) {
+            def tanque = Tanque.get(tanqueId)
+            log.debug("Asignando tanque ${tanque.nombre}")
+            tanque.empresa = springSecurityService.currentUser.empresa
+            tanque.save(flush:true)
+        }
+
+        def tanques
+        def cantidad
+        if (params.filtro) {
+            def filtro = params.filtro
+            tanques = Tanque.buscaPorEmpresa(empresa).buscaPorFiltro(filtro).list(params)
+            cantidad = Tanque.buscaPorEmpresa(empresa).buscaPorFiltro(filtro).count()
+        } else {
+            tanques = Tanque.findAllByEmpresa(empresa, params)
+            cantidad = Tanque.countByEmpresa(empresa)
+        }
+
+        [tanques: tanques, totalDeTanques: cantidad]
+    }
+
+    @Secured(['ROLE_ADMIN'])
+    def desasigna() {
+        def tanque = Tanque.get(params.id)
+        if (tanque) {
+            def empresa = Empresa.findByNombre('CENTERON')
+            tanque.empresa = empresa
+            tanque.save(flush:true)
+
+            flash.message = "Tanque ${tanque.nombre} ha sido desasignado"
+        } else {
+            flash.message = "Tanque ${params.id} no encontrado"
+        }
+        redirect action: 'lista'
     }
 }

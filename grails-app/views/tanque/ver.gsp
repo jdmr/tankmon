@@ -25,10 +25,12 @@
                     <i class="icon-list icon-white"></i>
                     <g:message code="tanque.list.label" />
                 </g:link>
-                <g:link class="btn btn-primary" action="nuevo">
-                    <i class="icon-plus icon-white"></i>
-                    <g:message code="default.create.label" args="[entityName]" />
-                </g:link>
+                <sec:ifAnyGranted roles="ROLE_ADMIN">
+                    <g:link class="btn btn-primary" action="nuevo">
+                        <i class="icon-plus icon-white"></i>
+                        <g:message code="default.create.label" args="[entityName]" />
+                    </g:link>
+                </sec:ifAnyGranted>
             </div>
         </div>
 
@@ -142,20 +144,26 @@
             </g:if>
         </div>
 
-        <div class="row-fluid">
-            <g:form>
-                <g:hiddenField name="id" value="${tanque?.id}" />
-                <div class="well">
-                    <g:link class="btn btn-large" action="edita" id="${tanque?.id}">
-                        <i class="icon-pencil"></i>
-                        <g:message code="default.button.edit.label" default="Edit" />
-                    </g:link>
-                    <button class="btn btn-large btn-danger" type="submit" name="_action_elimina" onclick="return confirm('<g:message code="default.button.delete.confirm.message" />');">
-                        <i class="icon-trash icon-white"></i>
-                        <g:message code="default.button.delete.label" default="Delete" />
-                    </button>
-                </div>
-            </g:form>
-        </div>
+        <sec:ifAnyGranted roles="ROLE_ADMIN">
+            <div class="row-fluid">
+                <g:form>
+                    <g:hiddenField name="id" value="${tanque?.id}" />
+                    <div class="well">
+                        <g:link class="btn btn-large" action="edita" id="${tanque?.id}">
+                            <i class="icon-pencil"></i>
+                            <g:message code="default.button.edit.label" default="Edit" />
+                        </g:link>
+                        <button class="btn btn-large btn-warning" type="submit" name="_action_desasigna" onclick="return confirm('¿Seguro que desea desasignar este tanque?');">
+                            <i class="icon-remove icon-white"></i>
+                            Desasigna
+                        </button>
+                        <button class="btn btn-large btn-danger" type="submit" name="_action_elimina" onclick="return confirm('<g:message code="default.button.delete.confirm.message" />');">
+                            <i class="icon-trash icon-white"></i>
+                            <g:message code="default.button.delete.label" default="Delete" />
+                        </button>
+                    </div>
+                </g:form>
+            </div>
+        </sec:ifAnyGranted>
 	</body>
 </html>

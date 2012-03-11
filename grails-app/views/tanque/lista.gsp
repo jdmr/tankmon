@@ -24,13 +24,15 @@
         <g:form action="lista" method="post">
             <div class="row-fluid">
                 <div class="well">
-                    <g:link class="btn btn-primary" action="asignables">
-                        <i class="icon-plus icon-white"></i> Asignar
-                    </g:link>
-                    <g:link class="btn btn-primary" action="nuevo">
-                        <i class="icon-plus icon-white"></i>
-                        <g:message code="default.create.label" args="[entityName]" />
-                    </g:link>
+                    <sec:ifAnyGranted roles="ROLE_ADMIN">
+                        <g:link class="btn btn-primary" action="asignables">
+                            <i class="icon-plus icon-white"></i> Asignar
+                        </g:link>
+                        <g:link class="btn btn-primary" action="nuevo">
+                            <i class="icon-plus icon-white"></i>
+                            <g:message code="default.create.label" args="[entityName]" />
+                        </g:link>
+                    </sec:ifAnyGranted>
                     <input name="filtro" type="text" class="input-large search-query" value="${params.filtro}">
                     <button type="submit" class="btn">
                         <i class="icon-search"></i>

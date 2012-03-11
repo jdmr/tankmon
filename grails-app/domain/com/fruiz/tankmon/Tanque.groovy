@@ -33,6 +33,25 @@ class Tanque implements Serializable {
         capacidadVacio column:'capacidad_vacio'
     }
 
+    static namedQueries = {
+        buscaPorEmpresa { filtro ->
+            empresa {
+                idEq filtro.id
+            }
+        }
+
+        buscaPorFiltro { filtro ->
+            filtro = "%$filtro%"
+            or {
+                ilike 'asignacion', filtro
+                ilike 'serie', filtro
+                ilike 'nombre', filtro
+                ilike 'producto', filtro
+                ilike 'tipo', filtro
+            }
+        }
+    }
+
     String toString() {
         return asignacion
     }
