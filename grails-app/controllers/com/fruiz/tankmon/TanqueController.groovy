@@ -116,4 +116,10 @@ class TanqueController {
             redirect action: 'ver', id: params.id
         }
     }
+
+    def asignables() {
+        params.max = Math.min(params.max ? params.int('max') : 10, 100)
+        def empresa = Empresa.findByNombre('CENTERON')
+        [tanques: Tanque.findAllByEmpresa(empresa, params), totalDeTanques: Tanque.countByEmpresa(empresa)]
+    }
 }

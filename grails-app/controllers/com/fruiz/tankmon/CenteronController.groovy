@@ -52,6 +52,7 @@ class CenteronController {
             def doc = reply.getSOAPBody().extractContentAsDocument()
             def records = doc.documentElement
 
+            def empresa = Empresa.findByNombre('CENTERON')
             use(DOMCategory) {
                 log.debug("Registros ${records.'*'.size()}")
                 def tanques = doc.getElementsByTagName('Table');
@@ -72,7 +73,7 @@ class CenteronController {
                             , capacidadVacio : new BigDecimal(remoto.PercentEmpty.text())
                             , capacidad : (remoto.Capacity.text())?new BigDecimal(remoto.Capacity.text()): new BigDecimal('0')
                             , tipo : remoto.Product.text()
-                            , empresa : springSecurityService.currentUser.empresa
+                            , empresa : empresa
                         ).save()
                     }
                 }

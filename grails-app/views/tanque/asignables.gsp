@@ -4,7 +4,7 @@
 	<head>
 		<meta name="layout" content="bootstrap">
 		<g:set var="entityName" value="${message(code: 'tanque.label', default: 'Tanque')}" />
-		<title><g:message code="tanque.list.label" /></title>
+		<title>Tanques por Asignar</title>
 	</head>
 	<body>
         <content tag="nav">
@@ -18,14 +18,14 @@
         </content>
 
         <div class="page-header">
-            <h1><g:message code="tanque.list.label" /></h1>
+            <h1>Tanques por Asignar</h1>
         </div>
 
         <g:form action="lista" method="post">
             <div class="row-fluid">
                 <div class="well">
-                    <g:link class="btn btn-primary" action="asignables">
-                        <i class="icon-plus icon-white"></i> Asignar
+                    <g:link class="btn btn-primary" action="lista">
+                        <i class="icon-list icon-white"></i> Lista
                     </g:link>
                     <g:link class="btn btn-primary" action="nuevo">
                         <i class="icon-plus icon-white"></i>

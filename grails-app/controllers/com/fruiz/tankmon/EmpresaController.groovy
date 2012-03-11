@@ -73,34 +73,39 @@ class EmpresaController {
             return
         }
 
-        if (params.version) {
-            def version = params.version.toLong()
-            if (empresa.version > version) {
-                empresa.errors.rejectValue('version', 'default.optimistic.locking.failure',
-                          [message(code: 'empresa.label', default: 'Empresa')] as Object[],
-                          "Another user has updated this Empresa while you were editing")
+        if (empresa.nombre != 'CENTERON') {
+            if (params.version) {
+                def version = params.version.toLong()
+                if (empresa.version > version) {
+                    empresa.errors.rejectValue('version', 'default.optimistic.locking.failure',
+                              [message(code: 'empresa.label', default: 'Empresa')] as Object[],
+                              "Another user has updated this Empresa while you were editing")
+                    render view: 'edita', model: [empresa: empresa]
+                    return
+                }
+            }
+
+            empresa.properties = params
+
+            try {
+                Empresa.withTransaction {
+                    empresa.save(flush:true)
+                    def usuario = springSecurityService.currentUser
+                    usuario.empresa = empresa
+                    usuario.save(flush:true)
+                    session.empresa = empresa.nombre
+                }
+            } catch(ValidationException e) {
                 render view: 'edita', model: [empresa: empresa]
                 return
             }
+
+            flash.message = message(code: 'default2.updated.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
+            redirect action: 'ver', id: empresa.id
+        } else {
+            flash.message = 'No se puede modificar la empresa CENTERON'
+            redirect action: 'ver', id: empresa.id
         }
-
-        empresa.properties = params
-
-        try {
-            Empresa.withTransaction {
-                empresa.save(flush:true)
-                def usuario = springSecurityService.currentUser
-                usuario.empresa = empresa
-                usuario.save(flush:true)
-                session.empresa = empresa.nombre
-            }
-        } catch(ValidationException e) {
-            render view: 'edita', model: [empresa: empresa]
-            return
-        }
-
-        flash.message = message(code: 'default2.updated.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
-        redirect action: 'ver', id: empresa.id
     }
 
     def elimina() {
@@ -111,39 +116,46 @@ class EmpresaController {
             return
         }
 
-        try {
-            if (Empresa.count() > 1) {
-                Empresa.withTransaction {
-                    def otraEmpresa = Empresa.findByIdNot(empresa.id)
-                    def rolAdmin = Rol.findByAuthority('ROLE_ADMIN')
-                    def usuarios = empresa.usuarios
-                    def usuariosParaEliminar = []
-                    for(usuario in usuarios) {
-                        for(rol in usuario.authorities) {
-                            if (rol == rolAdmin) {
-                                usuario.empresa = otraEmpresa
-                                usuario.save(flush:true)
-                            } else {
-                                usuariosParaEliminar << usuario
+        if (empresa.nombre != 'CENTERON') {
+
+            try {
+                if (Empresa.count() > 1) {
+                    Empresa.withTransaction {
+                        def otraEmpresa = Empresa.findByIdNot(empresa.id)
+                        def rolAdmin = Rol.findByAuthority('ROLE_ADMIN')
+                        def usuarios = empresa.usuarios
+                        def usuariosParaEliminar = []
+                        for(usuario in usuarios) {
+                            for(rol in usuario.authorities) {
+                                if (rol == rolAdmin) {
+                                    usuario.empresa = otraEmpresa
+                                    usuario.save(flush:true)
+                                } else {
+                                    usuariosParaEliminar << usuario
+                                }
                             }
                         }
+                        empresa.usuarios?.clear()
+                        for(usuario in usuariosParaEliminar) {
+                            usuarios.remove(usuario)
+                            UsuarioRol.removeAll(usuario)
+                            usuario.delete(flush: true)
+                        }
+                        empresa.delete(flush: true)
+                        flash.message = message(code: 'default2.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
+                        redirect action: 'lista'
                     }
-                    empresa.usuarios?.clear()
-                    for(usuario in usuariosParaEliminar) {
-                        usuarios.remove(usuario)
-                        UsuarioRol.removeAll(usuario)
-                        usuario.delete(flush: true)
-                    }
-                    empresa.delete(flush: true)
-                    flash.message = message(code: 'default2.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
+                } else {
+                    flash.message = message(code: 'ultima.empresa.no.borrada.message', args: [empresa.nombre])
                     redirect action: 'lista'
                 }
-            } else {
-                flash.message = message(code: 'ultima.empresa.no.borrada.message', args: [empresa.nombre])
-                redirect action: 'lista'
+            } catch (DataIntegrityViolationException e) {
+                flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
+                redirect action: 'ver', id: params.id
             }
-        } catch (DataIntegrityViolationException e) {
-			flash.message = message(code: 'default.not.deleted.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
+
+        } else {
+            flash.message = 'No se puede eliminar la empresa CENTERON'
             redirect action: 'ver', id: params.id
         }
     }
