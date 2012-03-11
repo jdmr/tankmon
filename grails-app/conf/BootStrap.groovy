@@ -16,10 +16,20 @@ class BootStrap {
             }
         }
 
+        log.debug('Validando CENTERON')
+        def empresa = Empresa.findByNombre('CENTERON')
+        if (!empresa) {
+            empresa = new Empresa(
+                nombre: 'CENTERON'
+                , razonSocial: 'CENTERON'
+                , rfc: 'CENTERON0001'
+            ).save()
+        }
+
         log.debug('Validando USUARIOS')
         def admin = UsuarioRol.findByRol(rolAdmin)
         if (!admin) {
-            def empresa = Empresa.findByNombre('BASE')
+            empresa = Empresa.findByNombre('BASE')
             if (!empresa) {
                 empresa = new Empresa(
                     nombre: 'BASE'
@@ -37,6 +47,7 @@ class BootStrap {
             ).save()
 
             UsuarioRol.create(admin, rolAdmin, true)
+
         }
 
         log.info('TANKMON Inicializado')

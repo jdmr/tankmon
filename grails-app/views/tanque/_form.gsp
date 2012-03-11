@@ -1,5 +1,13 @@
 <%@ page import="com.fruiz.tankmon.Tanque" %>
 
+<div class="control-group ${hasErrors(bean: empresa, field: 'nombre', 'error')}">
+	<label for="nombre">
+		<g:message code="nombre.label" />
+		<span class="required-indicator">*</span>
+	</label>
+	<g:textField name="nombre" required="" value="${tanque?.nombre}"/>
+</div>
+
 <div class="control-group ${hasErrors(bean: tanque, field: 'asignacion', 'error')}">
 	<label for="asignacion">
 		<g:message code="asignacion.label" />

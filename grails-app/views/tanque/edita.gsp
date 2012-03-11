@@ -55,7 +55,7 @@
 		</div>
         <r:script>
         $(document).ready(function(){
-            $('input#asignacion').focus();
+            $('input#nombre').focus();
         });
         </r:script>
 	</body>
