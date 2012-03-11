@@ -41,6 +41,10 @@ class TanqueController {
         try {
             tanque.empresa = springSecurityService.currentUser.empresa
             tanque.save(flush:true)
+
+            def xtanque = new XTanque(tanque.properties)
+            xtanque.empresaId = empresa.id
+            xtanque.save()
         } catch(ValidationException e) {
             render view: 'nuevo', model: [tanque: tanque]
             return
@@ -97,6 +101,10 @@ class TanqueController {
         try {
             tanque.empresa = springSecurityService.currentUser.empresa
             tanque.save(flush:true)
+
+            def xtanque = new XTanque(tanque.properties)
+            xtanque.empresaId = empresa.id
+            xtanque.save()
         } catch(ValidationException e) {
             render view: 'edita', model: [tanque: tanque]
             return
@@ -139,6 +147,10 @@ class TanqueController {
             log.debug("Asignando tanque ${tanque.nombre}")
             tanque.empresa = springSecurityService.currentUser.empresa
             tanque.save(flush:true)
+
+            def xtanque = new XTanque(tanque.properties)
+            xtanque.empresaId = empresa.id
+            xtanque.save()
         }
 
         def tanques
@@ -162,6 +174,10 @@ class TanqueController {
             def empresa = Empresa.findByNombre('CENTERON')
             tanque.empresa = empresa
             tanque.save(flush:true)
+
+            def xtanque = new XTanque(tanque.properties)
+            xtanque.empresaId = empresa.id
+            xtanque.save()
 
             flash.message = "Tanque ${tanque.nombre} ha sido desasignado"
         } else {

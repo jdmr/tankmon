@@ -75,6 +75,11 @@ class CenteronController {
                             , tipo : remoto.Product.text()
                             , empresa : empresa
                         ).save()
+
+                        def xtanque = new XTanque(tanque.properties)
+                        xtanque.id = null
+                        xtanque.empresaId = empresa.id
+                        xtanque.save()
                     }
                 }
             }
