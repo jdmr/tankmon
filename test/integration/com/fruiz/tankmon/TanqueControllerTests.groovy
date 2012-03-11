@@ -28,6 +28,7 @@ class TanqueControllerTests extends BaseIntegrationTest {
         for (i in 1..20) {
             def tanque = new Tanque(
                 asignacion : "TEST--$i"
+                , nombre : "TEST--$i"
                 , serie : "TEST--$i"
                 , fechaFabricacion : new Date()
                 , producto : "TEST--$i"
@@ -61,6 +62,7 @@ class TanqueControllerTests extends BaseIntegrationTest {
         def model = controller.nuevo()
         assert model.tanque
 
+        controller.params.nombre = 'TEST--1'
         controller.params.asignacion = 'TEST--1'
         controller.params.serie = 'TEST--1'
         controller.params.fechaFabricacion = new Date()
@@ -83,6 +85,7 @@ class TanqueControllerTests extends BaseIntegrationTest {
 
         def tanque = new Tanque(
             asignacion : 'TEST--1'
+            , nombre : 'TEST--1'
             , serie : 'TEST--1'
             , fechaFabricacion : new Date()
             , producto : 'TEST--1'
@@ -126,6 +129,7 @@ class TanqueControllerTests extends BaseIntegrationTest {
 
         def tanque = new Tanque(
             asignacion : 'TEST--1'
+            , nombre : 'TEST--1'
             , serie : 'TEST--1'
             , fechaFabricacion : new Date()
             , producto : 'TEST--1'
