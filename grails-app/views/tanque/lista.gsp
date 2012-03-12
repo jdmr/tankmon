@@ -74,7 +74,7 @@
                         
                             <td>${fieldValue(bean: tanque, field: "serie")}</td>
                         
-                            <td>${fieldValue(bean: tanque, field: "fechaFabricacion")}</td>
+                            <td><g:formatDate date="${tanque.fechaFabricacion}" format="yyyy/MM/dd" /></td>
                         
                             <td>${fieldValue(bean: tanque, field: "capacidad")} ${fieldValue(bean: tanque, field: "unidades")}</td>
                         

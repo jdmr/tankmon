@@ -89,9 +89,10 @@ class TanqueController {
         def data = [:]
         def labels = [:]
         def cont = 0
+        def sdf = new java.text.SimpleDateFormat("HH:mm")
         for(xtanque in historial) {
             puntos << xtanque.capacidadLleno
-            labels."${cont++}" = xtanque.dateCreated.toString()
+            labels."${cont++}" = sdf.format(xtanque.dateCreated)
         }
         data."${tanque.nombre}" = puntos
 

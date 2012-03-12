@@ -35,6 +35,8 @@ class Tanque implements Serializable {
         nombre index:'tanque_filtro_idx'
         tipo index:'tanque_filtro_idx'
         producto index:'tanque_filtro_idx'
+        latitud scale:16
+        longitud scale:16
     }
 
     static namedQueries = {
