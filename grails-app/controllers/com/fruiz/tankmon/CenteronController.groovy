@@ -52,14 +52,12 @@ class CenteronController {
             def doc = reply.getSOAPBody().extractContentAsDocument()
             def records = doc.documentElement
 
-            def empresa = Empresa.findByNombre('CENTERON')
+            def empresa = Empresa.findByNombre('SIN ASIGNAR')
             use(DOMCategory) {
                 log.debug("Registros ${records.'*'.size()}")
                 def tanques = doc.getElementsByTagName('Table');
                 log.debug("Tanques ${tanques.size()}")
                 tanques.each { remoto ->
-                    log.debug("AssetUID: ${remoto.AssetUID.text()}")
-                    log.debug("Capacidad: ${remoto.Capacity.text()}")
                     def tanque = Tanque.findByAsignacion(remoto.AssetUID.text())
                     if (!tanque) {
                         tanque = new Tanque(
@@ -78,6 +76,23 @@ class CenteronController {
 
                         def xtanque = new XTanque(tanque.properties)
                         xtanque.id = null
+                        xtanque.capacidadLleno = new BigDecimal(remoto.PercentFull.text())
+                        xtanque.capacidadVacio = new BigDecimal(remoto.PercentEmpty.text())
+                        xtanque.capacidad = (remoto.Capacity.text())?new BigDecimal(remoto.Capacity.text()): new BigDecimal('0')
+                        xtanque.tanqueId = tanque.id
+                        xtanque.empresaId = empresa.id
+                        xtanque.save()
+                    } else {
+                        tanque.capacidadLleno = new BigDecimal(remoto.PercentFull.text())
+                        tanque.capacidadVacio = new BigDecimal(remoto.PercentEmpty.text())
+                        tanque.capacidad = (remoto.Capacity.text())?new BigDecimal(remoto.Capacity.text()): new BigDecimal('0')
+                        tanque.save(flush:true)
+
+                        def xtanque = new XTanque(tanque.properties)
+                        xtanque.id = null
+                        xtanque.capacidadLleno = new BigDecimal(remoto.PercentFull.text())
+                        xtanque.capacidadVacio = new BigDecimal(remoto.PercentEmpty.text())
+                        xtanque.capacidad = (remoto.Capacity.text())?new BigDecimal(remoto.Capacity.text()): new BigDecimal(tanque.capacidad)
                         xtanque.tanqueId = tanque.id
                         xtanque.empresaId = empresa.id
                         xtanque.save()
