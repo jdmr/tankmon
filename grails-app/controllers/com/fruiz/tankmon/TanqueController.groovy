@@ -39,13 +39,33 @@ class TanqueController {
     def crea() {
         def tanque = new Tanque(params)
         try {
-            tanque.empresa = springSecurityService.currentUser.empresa
-            tanque.save(flush:true)
+            Tanque.withTransaction {
+                tanque.empresa = springSecurityService.currentUser.empresa
+                tanque.capacidad = new BigDecimal(params.capacidad)
+                tanque.largo = new BigDecimal(params.largo)
+                tanque.ancho = new BigDecimal(params.ancho)
+                tanque.profundo = new BigDecimal(params.profundo)
+                tanque.diametro = new BigDecimal(params.diametro)
+                tanque.capacidadLleno = new BigDecimal(params.capacidadLleno)
+                tanque.capacidadVacio = new BigDecimal(params.capacidadVacio)
+                tanque.latitud = new BigDecimal(params.latitud)
+                tanque.longitud = new BigDecimal(params.longitud)
+                tanque.save(flush:true)
 
-            def xtanque = new XTanque(tanque.properties)
-            xtanque.tanqueId = tanque.id
-            xtanque.empresaId = empresa.id
-            xtanque.save()
+                def xtanque = new XTanque(tanque.properties)
+                xtanque.capacidad = new BigDecimal(params.capacidad)
+                xtanque.largo = new BigDecimal(params.largo)
+                xtanque.ancho = new BigDecimal(params.ancho)
+                xtanque.profundo = new BigDecimal(params.profundo)
+                xtanque.diametro = new BigDecimal(params.diametro)
+                xtanque.capacidadLleno = new BigDecimal(params.capacidadLleno)
+                xtanque.capacidadVacio = new BigDecimal(params.capacidadVacio)
+                xtanque.latitud = new BigDecimal(params.latitud)
+                xtanque.longitud = new BigDecimal(params.longitud)
+                xtanque.tanqueId = tanque.id
+                xtanque.empresaId = tanque.empresa.id
+                xtanque.save()
+            }
         } catch(ValidationException e) {
             render view: 'nuevo', model: [tanque: tanque]
             return
@@ -73,7 +93,7 @@ class TanqueController {
             puntos << xtanque.capacidadLleno
             labels."${cont++}" = xtanque.dateCreated.toString()
         }
-        data."${tanque.asignacion}" = puntos
+        data."${tanque.nombre}" = puntos
 
         log.debug "DATA: ${data}"
         log.debug "Labels: ${labels}"
@@ -115,13 +135,35 @@ class TanqueController {
         tanque.properties = params
 
         try {
-            tanque.empresa = springSecurityService.currentUser.empresa
-            tanque.save(flush:true)
+            Tanque.withTransaction {
+                log.debug("Latitud : $params.latitud")
+                log.debug("Longitud : $params.longitud")
+                tanque.capacidad = new BigDecimal(params.capacidad)
+                tanque.largo = new BigDecimal(params.largo)
+                tanque.ancho = new BigDecimal(params.ancho)
+                tanque.profundo = new BigDecimal(params.profundo)
+                tanque.diametro = new BigDecimal(params.diametro)
+                tanque.capacidadLleno = new BigDecimal(params.capacidadLleno)
+                tanque.capacidadVacio = new BigDecimal(params.capacidadVacio)
+                tanque.latitud = new BigDecimal(params.latitud)
+                tanque.longitud = new BigDecimal(params.longitud)
+                tanque.empresa = springSecurityService.currentUser.empresa
+                tanque.save(flush:true)
 
-            def xtanque = new XTanque(tanque.properties)
-            xtanque.empresaId = empresa.id
-            xtanque.tanqueId = tanque.id
-            xtanque.save()
+                def xtanque = new XTanque(tanque.properties)
+                xtanque.capacidad = new BigDecimal(params.capacidad)
+                xtanque.largo = new BigDecimal(params.largo)
+                xtanque.ancho = new BigDecimal(params.ancho)
+                xtanque.profundo = new BigDecimal(params.profundo)
+                xtanque.diametro = new BigDecimal(params.diametro)
+                xtanque.capacidadLleno = new BigDecimal(params.capacidadLleno)
+                xtanque.capacidadVacio = new BigDecimal(params.capacidadVacio)
+                xtanque.latitud = new BigDecimal(params.latitud)
+                xtanque.longitud = new BigDecimal(params.longitud)
+                xtanque.empresaId = tanque.empresa.id
+                xtanque.tanqueId = tanque.id
+                xtanque.save()
+            }
         } catch(ValidationException e) {
             render view: 'edita', model: [tanque: tanque]
             return

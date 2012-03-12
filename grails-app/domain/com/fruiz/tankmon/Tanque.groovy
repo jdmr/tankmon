@@ -5,6 +5,7 @@ class Tanque implements Serializable {
     String serie
     String nombre
     Date fechaFabricacion
+    String tipo
     String producto
     String unidades = "Lts"
     BigDecimal capacidad = new BigDecimal('0')
@@ -14,23 +15,26 @@ class Tanque implements Serializable {
     BigDecimal diametro = new BigDecimal('0')
     BigDecimal capacidadLleno = new BigDecimal('0')
     BigDecimal capacidadVacio = new BigDecimal('0')
-    String tipo
+    BigDecimal latitud = new BigDecimal('0')
+    BigDecimal longitud = new BigDecimal('0')
 
     static belongsTo = [empresa: Empresa]
 
     static constraints = {
         asignacion blank: false, maxSize: 64
         serie blank: false, maxSize: 64, unique: true
+        tipo nullable: true, maxSize: 64
         producto blank: false, maxSize: 64
         unidades blank: false, maxSize: 64
-        tipo nullable: true, maxSize: 64
     }
 
     static mapping = {
         table 'tanques'
-        fechaFabricacion column:'fecha_fabricacion'
-        capacidadLleno column:'capacidad_lleno'
-        capacidadVacio column:'capacidad_vacio'
+        asignacion index:'tanque_filtro_idx'
+        serie index:'tanque_filtro_idx'
+        nombre index:'tanque_filtro_idx'
+        tipo index:'tanque_filtro_idx'
+        producto index:'tanque_filtro_idx'
     }
 
     static namedQueries = {
@@ -46,8 +50,8 @@ class Tanque implements Serializable {
                 ilike 'asignacion', filtro
                 ilike 'serie', filtro
                 ilike 'nombre', filtro
-                ilike 'producto', filtro
                 ilike 'tipo', filtro
+                ilike 'producto', filtro
             }
         }
     }

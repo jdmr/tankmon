@@ -123,6 +123,19 @@
 
                 <div class="row-fluid">
                     <div class="span6">
+                        <h4><g:message code="latitud.label" /></h4>
+                        <h3><g:formatNumber number="${tanque.latitud}" minIntegerDigits="1" maxFractionDigits="10" locale="en" /></h3>
+                        <p></p>
+                    </div>
+                    <div class="span6">
+                        <h4><g:message code="longitud.label" /></h4>
+                        <h3><g:formatNumber number="${tanque.longitud}" minIntegerDigits="1" maxFractionDigits="10" locale="en" /></h3>
+                        <p></p>
+                    </div>
+                </div>
+
+                <div class="row-fluid">
+                    <div class="span6">
                         <h4><g:message code="empresa.label" /></h4>
                         <h3><g:fieldValue bean="${tanque}" field="empresa.nombre"/></h3>
                         <p></p>
@@ -140,7 +153,7 @@
                     <p><bluff:line id="line" data="${data}" labels="${labels}" theme="theme_pastel" tooltips="true" options="[line_width: 2]"/></p>
                 </div>
                 <div class="row-fluid">
-                    <h1>Aqui va el mapa</h1>
+                    <div id="map_canvas" style="width: 250px; height: 250px;"></div>
                 </div>
             </div>
         </div>
@@ -166,5 +179,18 @@
                 </g:form>
             </div>
         </sec:ifAnyGranted>
+        <content tag="scripts">
+            <script src="http://maps.google.com/maps/api/js?sensor=false" type="text/javascript" ></script>
+            <script src="${createLink(uri: '/js/jquery.ui.map.full.min.js')}" type="text/javascript" ></script>
+        </content>
+        <r:script>
+        $(function() {
+                // Also works with: var yourStartLatLng = '59.3426606750, 18.0736160278';
+                // var latlng = new google.maps.LatLng(37.4419, -122.1419);
+                var latlng = new google.maps.LatLng(${tanque.latitud}, ${tanque.longitud});
+                $('#map_canvas').gmap({'center': latlng, 'zoom': 13, 'mapTypeId': google.maps.MapTypeId.ROADMAP});
+                $('#map_canvas').gmap('addMarker', { 'position': latlng, 'title': '${tanque.nombre}' });
+        });
+        </r:script>
 	</body>
 </html>

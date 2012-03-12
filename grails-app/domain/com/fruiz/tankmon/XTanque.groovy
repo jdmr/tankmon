@@ -5,16 +5,18 @@ class XTanque implements Serializable {
     String serie
     String nombre
     Date fechaFabricacion
-    String producto
-    String unidades = "Lts"
-    BigDecimal capacidad = new BigDecimal('0')
-    BigDecimal largo = new BigDecimal('0')
-    BigDecimal ancho = new BigDecimal('0')
-    BigDecimal profundo = new BigDecimal('0')
-    BigDecimal diametro = new BigDecimal('0')
-    BigDecimal capacidadLleno = new BigDecimal('0')
-    BigDecimal capacidadVacio = new BigDecimal('0')
     String tipo
+    String producto
+    String unidades
+    BigDecimal capacidad
+    BigDecimal largo
+    BigDecimal ancho
+    BigDecimal profundo
+    BigDecimal diametro
+    BigDecimal capacidadLleno
+    BigDecimal capacidadVacio
+    BigDecimal latitud
+    BigDecimal longitud
     Long tanqueId
     Long empresaId
     Date dateCreated
@@ -22,17 +24,15 @@ class XTanque implements Serializable {
     static constraints = {
         asignacion blank: false, maxSize: 64
         serie blank: false, maxSize: 64
+        tipo nullable: true, maxSize: 64
         producto blank: false, maxSize: 64
         unidades blank: false, maxSize: 64
-        tipo nullable: true, maxSize: 64
     }
 
     static mapping = {
         table 'xtanques'
-        empresaId column:'empresa_id'
-        fechaFabricacion column:'fecha_fabricacion'
-        capacidadLleno column:'capacidad_lleno'
-        capacidadVacio column:'capacidad_vacio'
+        tanqueId index:'xtanque_tanque_id_idx'
+        empresaId index:'xtanque_empresa_id_idx'
     }
 
     static namedQueries = {
