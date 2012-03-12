@@ -64,7 +64,7 @@
                     </div>
                     <div class="span6">
                         <h4><g:message code="capacidad.label" /></h4>
-                        <h3><g:fieldValue bean="${tanque}" field="capacidad"/> <g:fieldValue bean="${tanque}" field="unidades"/></h3>
+                        <h3><g:formatNumber number="${tanque.capacidad}" minIntegerDigits="1" maxFractionDigits="3" locale="en" /> <g:fieldValue bean="${tanque}" field="unidades"/></h3>
                         <p></p>
                     </div>
                 </div>
@@ -72,12 +72,12 @@
                 <div class="row-fluid">
                     <div class="span6">
                         <h4><g:message code="largo.label" /></h4>
-                        <h3><g:fieldValue bean="${tanque}" field="largo"/></h3>
+                        <h3><g:formatNumber number="${tanque.largo}" minIntegerDigits="1" maxFractionDigits="3" locale="en" /></h3>
                         <p></p>
                     </div>
                     <div class="span6">
                         <h4><g:message code="ancho.label" /></h4>
-                        <h3><g:fieldValue bean="${tanque}" field="ancho"/></h3>
+                        <h3><g:formatNumber number="${tanque.ancho}" minIntegerDigits="1" maxFractionDigits="3" locale="en" /></h3>
                         <p></p>
                     </div>
                 </div>
@@ -85,12 +85,12 @@
                 <div class="row-fluid">
                     <div class="span6">
                         <h4><g:message code="profundo.label" /></h4>
-                        <h3><g:fieldValue bean="${tanque}" field="profundo"/></h3>
+                        <h3><g:formatNumber number="${tanque.profundo}" minIntegerDigits="1" maxFractionDigits="3" locale="en" /></h3>
                         <p></p>
                     </div>
                     <div class="span6">
                         <h4><g:message code="diametro.label" /></h4>
-                        <h3><g:fieldValue bean="${tanque}" field="diametro"/></h3>
+                        <h3><g:formatNumber number="${tanque.diametro}" minIntegerDigits="1" maxFractionDigits="3" locale="en" /></h3>
                         <p></p>
                     </div>
                 </div>
@@ -111,12 +111,12 @@
                 <div class="row-fluid">
                     <div class="span6">
                         <h4><g:message code="capacidadLleno.label" /></h4>
-                        <h3><g:fieldValue bean="${tanque}" field="capacidadLleno"/> <g:fieldValue bean="${tanque}" field="unidades"/></h3>
+                        <h3><g:formatNumber number="${tanque.capacidadLleno}" minIntegerDigits="1" maxFractionDigits="3" locale="en" /> <g:fieldValue bean="${tanque}" field="unidades"/></h3>
                         <p></p>
                     </div>
                     <div class="span6">
                         <h4><g:message code="capacidadVacio.label" /></h4>
-                        <h3><g:fieldValue bean="${tanque}" field="capacidadVacio"/> <g:fieldValue bean="${tanque}" field="unidades"/></h3>
+                        <h3><g:formatNumber number="${tanque.capacidadVacio}" minIntegerDigits="1" maxFractionDigits="3" locale="en" /> <g:fieldValue bean="${tanque}" field="unidades"/></h3>
                         <p></p>
                     </div>
                 </div>
