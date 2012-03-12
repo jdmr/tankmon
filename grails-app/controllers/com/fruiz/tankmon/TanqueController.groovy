@@ -43,6 +43,7 @@ class TanqueController {
             tanque.save(flush:true)
 
             def xtanque = new XTanque(tanque.properties)
+            xtanque.tanqueId = tanque.id
             xtanque.empresaId = empresa.id
             xtanque.save()
         } catch(ValidationException e) {
@@ -62,7 +63,22 @@ class TanqueController {
             return
         }
 
-        [tanque: tanque]
+        def historial = XTanque.findAllByTanqueId(tanque.id, [max:5,sort:'id',order:'desc'])
+        log.debug("Historial : ${historial}")
+        def puntos = []
+        def data = [:]
+        def labels = [:]
+        def cont = 0
+        for(xtanque in historial) {
+            puntos << xtanque.capacidadLleno
+            labels."${cont++}" = xtanque.dateCreated.toString()
+        }
+        data."${tanque.asignacion}" = puntos
+
+        log.debug "DATA: ${data}"
+        log.debug "Labels: ${labels}"
+
+        [tanque: tanque, data: data, labels: labels]
     }
 
     def edita() {
@@ -104,6 +120,7 @@ class TanqueController {
 
             def xtanque = new XTanque(tanque.properties)
             xtanque.empresaId = empresa.id
+            xtanque.tanqueId = tanque.id
             xtanque.save()
         } catch(ValidationException e) {
             render view: 'edita', model: [tanque: tanque]
@@ -149,6 +166,7 @@ class TanqueController {
             tanque.save(flush:true)
 
             def xtanque = new XTanque(tanque.properties)
+            xtanque.tanqueId = tanque.id
             xtanque.empresaId = empresa.id
             xtanque.save()
         }
@@ -176,6 +194,7 @@ class TanqueController {
             tanque.save(flush:true)
 
             def xtanque = new XTanque(tanque.properties)
+            xtanque.tanqueId = tanque.id
             xtanque.empresaId = empresa.id
             xtanque.save()
 

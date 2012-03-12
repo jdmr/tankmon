@@ -74,10 +74,11 @@ class CenteronController {
                             , capacidad : (remoto.Capacity.text())?new BigDecimal(remoto.Capacity.text()): new BigDecimal('0')
                             , tipo : remoto.Product.text()
                             , empresa : empresa
-                        ).save()
+                        ).save(flush:true)
 
                         def xtanque = new XTanque(tanque.properties)
                         xtanque.id = null
+                        xtanque.tanqueId = tanque.id
                         xtanque.empresaId = empresa.id
                         xtanque.save()
                     }

@@ -15,6 +15,7 @@ class XTanque implements Serializable {
     BigDecimal capacidadLleno = new BigDecimal('0')
     BigDecimal capacidadVacio = new BigDecimal('0')
     String tipo
+    Long tanqueId
     Long empresaId
     Date dateCreated
 
