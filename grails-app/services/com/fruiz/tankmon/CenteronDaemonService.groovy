@@ -132,7 +132,7 @@ class CenteronDaemonService  {
         email.replyTo('jdmendoza@um.edu.mx')
         email.subject("$tipo ${tanque.nombre}(${tanque.asignacion})")
         email.withText("El tanque\n Nombre: ${tanque.nombre}\n Asignación: ${tanque.asignacion}\n Serie: ${tanque.serie}\n Está solo al ${tanque.capacidadLleno * 100}% cuando el porcentaje mínimo es ${tanque.precaucion * 100}%.\n\nFRuiz e Hijos")
-        email.withHtml("<html><head><title>Tanque ${tanque.nombre}</title></head><body><p>El tanque<br/>Nombre: ${tanque.nombre}<br/>Asignación: ${tanque.asignacion}<br/>Serie: <br/>Está solo al ${tanque.capacidadLleno * 100}% cuando el porcentaje mínimo es ${tanque.precaucion * 100}.</p><br/><br/><h3>FRuiz e Hijos</h3></body></html>")
+        email.withHtml("<html><head><title>Tanque ${tanque.nombre}</title></head><body><p>El tanque<br/>Nombre: ${tanque.nombre}<br/>Asignación: ${tanque.asignacion}<br/>Serie: ${tanque.serie}<br/>Está solo al ${tanque.capacidadLleno * 100}% cuando el porcentaje mínimo es ${tanque.precaucion * 100}.</p><br/><br/><h3>FRuiz e Hijos</h3></body></html>")
         sendGridService.send(email.build())
     }
 }
