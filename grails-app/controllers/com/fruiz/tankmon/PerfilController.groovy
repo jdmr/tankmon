@@ -10,7 +10,9 @@ class PerfilController {
     def index() {
         def empresas
         if (SpringSecurityUtils.ifAnyGranted('ROLE_ADMIN')) {
+            def sinAsignar = Empresa.findByNombre('SIN ASIGNAR')
             empresas = Empresa.list()
+            empresas.remove(sinAsignar)
         } else {
             empresas = [springSecurityService.currentUser.empresa]
         }

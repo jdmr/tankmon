@@ -17,12 +17,12 @@ class BootStrap {
         }
 
         log.debug('Validando CENTERON')
-        def empresa = Empresa.findByNombre('CENTERON')
+        def empresa = Empresa.findByNombre('SIN ASIGNAR')
         if (!empresa) {
             empresa = new Empresa(
-                nombre: 'CENTERON'
-                , razonSocial: 'CENTERON'
-                , rfc: 'CENTERON0001'
+                nombre: 'SIN ASIGNAR'
+                , razonSocial: 'SIN ASIGNAR'
+                , rfc: 'SINASIGNAR01'
             ).save()
         }
 

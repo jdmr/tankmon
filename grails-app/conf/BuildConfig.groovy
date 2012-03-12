@@ -12,7 +12,7 @@ grails.project.dependency.resolution = {
         // uncomment to disable ehcache
         // excludes 'ehcache'
     }
-    log "error" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
+    log "warn" // log level of Ivy resolver, either 'error', 'warn', 'info', 'debug' or 'verbose'
     checksums true // Whether to verify checksums on resolve
 
     repositories {
@@ -45,6 +45,7 @@ grails.project.dependency.resolution = {
         compile ":joda-time:1.3.1"
         compile ":jquery:1.7.1"
         compile ":resources:1.1.6"
+        //compile "org.quartz-scheduler:quartz:2.1.3"
 
         runtime ":twitter-bootstrap:2.0.1.17"
         runtime ":fields:1.0.1"

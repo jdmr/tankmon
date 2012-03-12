@@ -200,7 +200,7 @@ class TanqueController {
     @Secured(['ROLE_ADMIN'])
     def asignables() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        def empresa = Empresa.findByNombre('CENTERON')
+        def empresa = Empresa.findByNombre('SIN ASIGNAR')
 
         for(tanqueId in params.asignaciones) {
             def tanque = Tanque.get(tanqueId)
@@ -232,7 +232,7 @@ class TanqueController {
     def desasigna() {
         def tanque = Tanque.get(params.id)
         if (tanque) {
-            def empresa = Empresa.findByNombre('CENTERON')
+            def empresa = Empresa.findByNombre('SIN ASIGNAR')
             tanque.empresa = empresa
             tanque.save(flush:true)
 
