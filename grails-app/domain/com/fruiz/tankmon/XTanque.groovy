@@ -17,6 +17,8 @@ class XTanque implements Serializable {
     BigDecimal capacidadVacio
     BigDecimal latitud
     BigDecimal longitud
+    BigDecimal precaucion
+    BigDecimal alerta
     Long tanqueId
     Long empresaId
     Date dateCreated
@@ -27,6 +29,8 @@ class XTanque implements Serializable {
         tipo nullable: true, maxSize: 64
         producto blank: false, maxSize: 64
         unidades blank: false, maxSize: 64
+        latitud scale:16
+        longitud scale:16
     }
 
     static mapping = {

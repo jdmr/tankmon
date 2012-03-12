@@ -10,9 +10,9 @@
         <content tag="nav">
         <ul class="nav">
             <li><a href="${createLink(uri: '/')}"><g:message code='default.home.label' /></a></li>
+            <li><a href="${createLink(uri: '/tanque')}"><g:message code='tanque.list.label' /></a></li>
             <li><a href="${createLink(uri: '/empresa')}"><g:message code='empresa.list.label' /></a></li>
             <li class="active"><a href="${createLink(uri: '/usuario')}"><g:message code='usuario.list.label' /></a></li>
-            <li><a href="${createLink(uri: '/tanque')}"><g:message code='tanque.list.label' /></a></li>
             <li><a href="${createLink(uri: '/centeron')}"><g:message code='centeron.label' /></a></li>
         </ul>
         </content>
@@ -84,7 +84,7 @@
                     </tbody>
                 </table>
                 <div class="pagination">
-                    <bootstrap:paginate total="${totalDeUsuarios}" />
+                    <bootstrap:paginate total="${totalDeUsuarios}" params="${params}" />
                 </div>
 
             </div>

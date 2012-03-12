@@ -49,6 +49,7 @@ grails.project.dependency.resolution = {
 
         runtime ":twitter-bootstrap:2.0.1.17"
         runtime ":fields:1.0.1"
+        runtime ":sendgrid:0.2"
 
         // Uncomment these (or add new ones) to enable additional resources capabilities
         //runtime ":zipped-resources:1.0"

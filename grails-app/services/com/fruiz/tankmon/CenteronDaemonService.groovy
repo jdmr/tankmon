@@ -2,11 +2,14 @@ package com.fruiz.tankmon
 
 import groovy.xml.dom.DOMCategory
 import javax.xml.soap.*
+import uk.co.desirableobjects.sendgrid.*
 
 class CenteronDaemonService  {
 
+    def sendGridService
+
     def process() {
-        log.debug("Ejecutando demonio de conexion a WebService de Centeron")
+        log.debug("Ejecutando demonio de sincronizacion con tanques de Centeron")
         try {
             SOAPConnectionFactory soapConnFactory = SOAPConnectionFactory.newInstance();
             SOAPConnection connection = soapConnFactory.createConnection();
@@ -86,6 +89,16 @@ class CenteronDaemonService  {
                         xtanque.tanqueId = tanque.id
                         xtanque.empresaId = empresa.id
                         xtanque.save()
+
+                        if (tanque.capacidadLleno < tanque.alerta) {
+                            if (tanque.empresa.nombre != 'SIN ASIGNAR') {
+                                enviaCorreo(tanque, 'ALERTA')
+                            }
+                        } else if (tanque.capacidadLleno < tanque.precaucion) {
+                            if (tanque.empresa.nombre != 'SIN ASIGNAR') {
+                                enviaCorreo(tanque, 'PRECAUCIÓN')
+                            }
+                        }
                     }
                 }
             }
@@ -96,5 +109,30 @@ class CenteronDaemonService  {
         }
 
         log.debug('Termino sincronizacion')
+    }
+
+    def enviaCorreo(tanque, tipo) {
+        def usuarios = tanque.empresa.usuarios
+        /*
+        sendGridService.sendMail {
+            from 'jdmendoza@um.edu.mx'
+            for(usuario in usuarios) {
+                to "${usuario.correo}"
+            }
+            subject "${tanque.nombre}(${tanque.asignacion}) en ${tipo}"
+            body "El tanque\n Nombre: ${tanque.nombre}\n Asignación: ${tanque.asignacion}\n Serie: ${tanque.serie}\n Tiene está solo al ${tanque.capacidadLleno * 100}% cuando el porcentaje válido es ${tanque.precaucion * 100}%.\n\nEquipo FRuiz"
+        }
+        */
+
+        def email = new SendGridEmailBuilder()
+        email.from('David Mendoza', 'jdmendoza@um.edu.mx')
+        for(usuario in usuarios) {
+            email.to("${usuario.nombre} ${usuario.apellido}", "${usuario.correo}")
+        }
+        email.replyTo('jdmendoza@um.edu.mx')
+        email.subject("$tipo ${tanque.nombre}(${tanque.asignacion})")
+        email.withText("El tanque\n Nombre: ${tanque.nombre}\n Asignación: ${tanque.asignacion}\n Serie: ${tanque.serie}\n Está solo al ${tanque.capacidadLleno * 100}% cuando el porcentaje mínimo es ${tanque.precaucion * 100}%.\n\nFRuiz e Hijos")
+        email.withHtml("<html><head><title>Tanque ${tanque.nombre}</title></head><body><p>El tanque<br/>Nombre: ${tanque.nombre}<br/>Asignación: ${tanque.asignacion}<br/>Serie: <br/>Está solo al ${tanque.capacidadLleno * 100}% cuando el porcentaje mínimo es ${tanque.precaucion * 100}.</p><br/><br/><h3>FRuiz e Hijos</h3></body></html>")
+        sendGridService.send(email.build())
     }
 }

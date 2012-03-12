@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException
 class TanqueController {
 
     def springSecurityService
+    def centeronDaemonService
 
     def index() {
         redirect action: 'lista', params: params
@@ -50,6 +51,8 @@ class TanqueController {
                 tanque.capacidadVacio = new BigDecimal(params.capacidadVacio)
                 tanque.latitud = new BigDecimal(params.latitud)
                 tanque.longitud = new BigDecimal(params.longitud)
+                tanque.precaucion = new BigDecimal(params.precaucion)
+                tanque.alerta = new BigDecimal(params.alerta)
                 tanque.save(flush:true)
 
                 def xtanque = new XTanque(tanque.properties)
@@ -62,6 +65,8 @@ class TanqueController {
                 xtanque.capacidadVacio = new BigDecimal(params.capacidadVacio)
                 xtanque.latitud = new BigDecimal(params.latitud)
                 xtanque.longitud = new BigDecimal(params.longitud)
+                xtanque.precaucion = new BigDecimal(params.precaucion)
+                xtanque.alerta = new BigDecimal(params.alerta)
                 xtanque.tanqueId = tanque.id
                 xtanque.empresaId = tanque.empresa.id
                 xtanque.save()
@@ -148,6 +153,8 @@ class TanqueController {
                 tanque.capacidadVacio = new BigDecimal(params.capacidadVacio)
                 tanque.latitud = new BigDecimal(params.latitud)
                 tanque.longitud = new BigDecimal(params.longitud)
+                tanque.precaucion = new BigDecimal(params.precaucion)
+                tanque.alerta = new BigDecimal(params.alerta)
                 tanque.empresa = springSecurityService.currentUser.empresa
                 tanque.save(flush:true)
 
@@ -161,6 +168,8 @@ class TanqueController {
                 xtanque.capacidadVacio = new BigDecimal(params.capacidadVacio)
                 xtanque.latitud = new BigDecimal(params.latitud)
                 xtanque.longitud = new BigDecimal(params.longitud)
+                xtanque.precaucion = new BigDecimal(params.precaucion)
+                xtanque.alerta = new BigDecimal(params.alerta)
                 xtanque.empresaId = tanque.empresa.id
                 xtanque.tanqueId = tanque.id
                 xtanque.save()
@@ -202,16 +211,18 @@ class TanqueController {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
         def empresa = Empresa.findByNombre('SIN ASIGNAR')
 
-        for(tanqueId in params.asignaciones) {
-            def tanque = Tanque.get(tanqueId)
-            log.debug("Asignando tanque ${tanque.nombre}")
-            tanque.empresa = springSecurityService.currentUser.empresa
-            tanque.save(flush:true)
+        Tanque.withTransaction {
+            for(tanqueId in params.asignaciones) {
+                def tanque = Tanque.get(tanqueId)
+                log.debug("Asignando tanque ${tanque.nombre}")
+                tanque.empresa = springSecurityService.currentUser.empresa
+                tanque.save(flush:true)
 
-            def xtanque = new XTanque(tanque.properties)
-            xtanque.tanqueId = tanque.id
-            xtanque.empresaId = empresa.id
-            xtanque.save()
+                def xtanque = new XTanque(tanque.properties)
+                xtanque.tanqueId = tanque.id
+                xtanque.empresaId = empresa.id
+                xtanque.save()
+            }
         }
 
         def tanques
@@ -232,19 +243,29 @@ class TanqueController {
     def desasigna() {
         def tanque = Tanque.get(params.id)
         if (tanque) {
-            def empresa = Empresa.findByNombre('SIN ASIGNAR')
-            tanque.empresa = empresa
-            tanque.save(flush:true)
+            Tanque.withTransaction {
+                def empresa = Empresa.findByNombre('SIN ASIGNAR')
+                tanque.empresa = empresa
+                tanque.save(flush:true)
 
-            def xtanque = new XTanque(tanque.properties)
-            xtanque.tanqueId = tanque.id
-            xtanque.empresaId = empresa.id
-            xtanque.save()
+                def xtanque = new XTanque(tanque.properties)
+                xtanque.tanqueId = tanque.id
+                xtanque.empresaId = empresa.id
+                xtanque.save()
+            }
 
             flash.message = "Tanque ${tanque.nombre} ha sido desasignado"
         } else {
             flash.message = "Tanque ${params.id} no encontrado"
         }
         redirect action: 'lista'
+    }
+
+    def enviarEstatus() {
+        def tanque = Tanque.get(params.id)
+        centeronDaemonService.enviaCorreo(tanque, 'ESTATUS')
+
+        flash.message = "El estatus del tanque ${tanque.nombre} ha sido enviado"
+        redirect action: 'ver', id: params.id
     }
 }

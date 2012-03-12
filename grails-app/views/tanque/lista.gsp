@@ -91,7 +91,7 @@
                     </tbody>
                 </table>
                 <div class="pagination">
-                    <bootstrap:paginate total="${totalDeTanques}" />
+                    <bootstrap:paginate total="${totalDeTanques}" params="${params}" />
                 </div>
 
             </div>

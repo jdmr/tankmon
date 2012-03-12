@@ -17,6 +17,8 @@ class Tanque implements Serializable {
     BigDecimal capacidadVacio = new BigDecimal('0')
     BigDecimal latitud = new BigDecimal('0')
     BigDecimal longitud = new BigDecimal('0')
+    BigDecimal precaucion = new BigDecimal('0')
+    BigDecimal alerta = new BigDecimal('0')
 
     static belongsTo = [empresa: Empresa]
 

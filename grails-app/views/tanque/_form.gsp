@@ -136,3 +136,20 @@
     </div>
 </div>
 
+<div class="row-fluid">
+    <div class="span4 control-group ${hasErrors(bean: tanque, field: 'precaucion', 'error')}">
+        <label for="precaucion">
+            <g:message code="precaucion.label" />
+            <span class="required-indicator">*</span>
+        </label>
+        <g:field name="precaucion" value="${tanque?.precaucion}" type="number" min="0" step="0.001" required="" style="text-align: right;" />
+    </div>
+    <div class="span4 control-group ${hasErrors(bean: tanque, field: 'alerta', 'error')}">
+        <label for="alerta">
+            <g:message code="alerta.label" />
+            <span class="required-indicator">*</span>
+        </label>
+        <g:field name="alerta" value="${tanque?.alerta}" type="number" min="0" step="0.001" required="" style="text-align: right;" />
+    </div>
+</div>
+

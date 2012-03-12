@@ -114,12 +114,12 @@
                 <div class="row-fluid">
                     <div class="span6">
                         <h4><g:message code="capacidadLleno.label" /></h4>
-                        <h3><g:formatNumber number="${tanque.capacidadLleno}" minIntegerDigits="1" maxFractionDigits="3" locale="en" /> <g:fieldValue bean="${tanque}" field="unidades"/></h3>
+                        <h3><g:formatNumber number="${tanque.capacidadLleno}" locale="en" type="percent" /></h3>
                         <p></p>
                     </div>
                     <div class="span6">
                         <h4><g:message code="capacidadVacio.label" /></h4>
-                        <h3><g:formatNumber number="${tanque.capacidadVacio}" minIntegerDigits="1" maxFractionDigits="3" locale="en" /> <g:fieldValue bean="${tanque}" field="unidades"/></h3>
+                        <h3><g:formatNumber number="${tanque.capacidadVacio}" locale="en" type="percent" /></h3>
                         <p></p>
                     </div>
                 </div>
@@ -150,6 +150,19 @@
                     </div>
                 </div>
 
+                <div class="row-fluid">
+                    <div class="span6">
+                        <h4><g:message code="precaucion.label" /></h4>
+                        <h3><g:formatNumber number="${tanque.precaucion}" locale="en" type="percent" /></h3>
+                        <p></p>
+                    </div>
+                    <div class="span6">
+                        <h4><g:message code="alerta.label" /></h4>
+                        <h3><g:formatNumber number="${tanque.alerta}" locale="en" type="percent" /></h3>
+                        <p></p>
+                    </div>
+                </div>
+
             </div>
             <div class="span4">
                 <div class="row-fluid">
@@ -170,6 +183,10 @@
                             <i class="icon-pencil"></i>
                             <g:message code="default.button.edit.label" default="Edit" />
                         </g:link>
+                        <button class="btn btn-large btn-warning" type="submit" name="_action_enviarEstatus" onclick="return confirm('¿Seguro que desea enviar el estatus de este tanque?');">
+                            <i class="icon-envelope icon-white"></i>
+                            Enviar Estatus
+                        </button>
                         <button class="btn btn-large btn-warning" type="submit" name="_action_desasigna" onclick="return confirm('¿Seguro que desea desasignar este tanque?');">
                             <i class="icon-remove icon-white"></i>
                             Desasigna

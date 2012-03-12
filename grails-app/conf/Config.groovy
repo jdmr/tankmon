@@ -149,3 +149,8 @@ grails.plugins.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, app
     session.empresa = domain[0].empresa
 }
 
+
+sendgrid {
+    username = 'jdmr'
+    password = 'admin2k1'
+}
