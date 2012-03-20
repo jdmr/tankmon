@@ -108,14 +108,14 @@
             <g:message code="capacidadLleno.label" />
             <span class="required-indicator">*</span>
         </label>
-        <g:field name="capacidadLleno" value="${tanque?.capacidadLleno}" type="number" min="0" step="0.001" required="" style="text-align: right;" />
+        <g:field name="capacidadLleno" value="${tanque?.capacidadLleno}" type="number" min="0" step="1" required="" style="text-align: right;" />
     </div>
     <div class="span4 control-group ${hasErrors(bean: tanque, field: 'capacidadVacio', 'error')}">
         <label for="capacidadVacio">
             <g:message code="capacidadVacio.label" />
             <span class="required-indicator">*</span>
         </label>
-        <g:field name="capacidadVacio" value="${tanque?.capacidadVacio}" type="number" min="0" step="0.001" required="" style="text-align: right;" />
+        <g:field name="capacidadVacio" value="${tanque?.capacidadVacio}" type="number" min="0" step="1" required="" style="text-align: right;" />
     </div>
 </div>
 
