@@ -143,10 +143,11 @@ grails.plugins.springsecurity.roleHierarchy = '''
 
 grails.plugins.springsecurity.useSecurityEventListener = true
 grails.plugins.springsecurity.onInteractiveAuthenticationSuccessEvent = { e, appCtx ->
-    def domain = com.fruiz.tankmon.Usuario.executeQuery("select new map(usuario.empresa.nombre as empresa) from Usuario usuario where usuario.username = ?", [e.source.principal.username])
+    def domain = com.fruiz.tankmon.Usuario.executeQuery("select new map(usuario.empresa.nombre as empresa, usuario.empresa.id as empresaId) from Usuario usuario where usuario.username = ?", [e.source.principal.username])
     def request = org.codehaus.groovy.grails.plugins.springsecurity.SecurityRequestHolder.getRequest()
     def session = request.getSession(false)
     session.empresa = domain[0].empresa
+    session.empresaId = domain[0].empresaId
 }
 
 

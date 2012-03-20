@@ -61,7 +61,9 @@
 			<footer>
                 <div class="row-fluid">
                     <div class="span8"><p>&copy; <a href='http://www.fruiz.com'>FRuiz e Hijos</a> 2012</p></div>
-                    <div class="span4"><p class="pull-right"><a href="${createLink(uri:'/perfil')}">${session.empresa}</a></p></div>
+                    <div class="span4">
+                        <p class="pull-right"><a href="${createLink(uri:'/perfil')}">${session.empresa}</a></p>
+                    </div>
                 </div>
 			</footer>
 		</div>

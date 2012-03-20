@@ -37,7 +37,7 @@
                     </bootstrap:alert>
 				</g:hasErrors>
 
-                <g:form action="actualiza" id="${empresa?.id}">
+                <g:form action="actualiza" id="${empresa?.id}" enctype="multipart/form-data" >
 					<g:hiddenField name="version" value="${empresa?.version}" />
 				    <fieldset>
                         <g:render template="form"/>

@@ -39,3 +39,10 @@
 	</label>
 	<g:field type="number" name="maximoUsuarios" required="" value="${empresa.maximoUsuarios}" min="1" style="text-align:right;"/>
 </div>
+
+<div class="control-group ${hasErrors(bean: empresa, field: 'imagenes', 'error')}">
+	<label for="imagen">
+		<g:message code="logo.label" />
+	</label>
+    <input type="file" name="imagen" id="imagen" />
+</div>

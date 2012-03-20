@@ -37,7 +37,7 @@
                     </bootstrap:alert>
 				</g:hasErrors>
 
-                <g:form action="crea" >
+                <g:form action="crea" enctype="multipart/form-data" >
 				    <fieldset>
                         <g:render template="form"/>
                     </fieldset>

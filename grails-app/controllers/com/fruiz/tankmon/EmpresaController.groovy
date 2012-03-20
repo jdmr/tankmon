@@ -15,7 +15,10 @@ class EmpresaController {
 
     def lista() {
         params.max = Math.min(params.max ? params.int('max') : 10, 100)
-        [empresas: Empresa.list(params), totalDeEmpresas: Empresa.count()]
+        def sinAsignar = Empresa.findByNombre('SIN ASIGNAR')
+        def empresas = Empresa.list(params)
+        empresas.remove(sinAsignar)
+        [empresas: empresas, totalDeEmpresas: (Empresa.count() - 1)]
     }
 
     def nueva() {
@@ -32,6 +35,24 @@ class EmpresaController {
                 usuario.empresa = empresa
                 usuario.save(flush:true)
                 session.empresa = empresa.nombre
+
+                def archivo = request.getFile('imagen')
+                if (!archivo.empty) {
+                    byte[] f = archivo.bytes
+                    def imagen = new Imagen (
+                        nombre : archivo.originalFilename
+                        , tipoContenido : archivo.contentType
+                        , tamano : archivo.size
+                        , archivo : f
+                    )
+                    if (empresa.imagenes) {
+                        empresa.imagenes?.clear()
+                    } else {
+                        empresa.imagenes = []
+                    }
+                    empresa.imagenes << imagen
+                    empresa.save()
+                }
             }
         } catch(ValidationException e) {
             render view: 'nueva', model: [empresa: empresa]
@@ -73,7 +94,7 @@ class EmpresaController {
             return
         }
 
-        if (empresa.nombre != 'CENTERON') {
+        if (empresa.nombre != 'SIN ASIGNAR') {
             if (params.version) {
                 def version = params.version.toLong()
                 if (empresa.version > version) {
@@ -89,6 +110,23 @@ class EmpresaController {
 
             try {
                 Empresa.withTransaction {
+                    def archivo = request.getFile('imagen')
+                    if (!archivo.empty) {
+                        byte[] f = archivo.bytes
+                        def imagen = new Imagen(
+                            nombre : archivo.originalFilename
+                            , tipoContenido : archivo.contentType
+                            , tamano : archivo.size
+                            , archivo : f
+                        )
+                        if (empresa.imagenes) {
+                            empresa.imagenes?.clear()
+                        } else {
+                            empresa.imagenes = []
+                        }
+                        empresa.imagenes << imagen
+                    }
+
                     empresa.save(flush:true)
                     def usuario = springSecurityService.currentUser
                     usuario.empresa = empresa
@@ -103,7 +141,7 @@ class EmpresaController {
             flash.message = message(code: 'default2.updated.message', args: [message(code: 'empresa.label', default: 'Empresa'), empresa.nombre])
             redirect action: 'ver', id: empresa.id
         } else {
-            flash.message = 'No se puede modificar la empresa CENTERON'
+            flash.message = 'No se puede modificar la empresa SIN ASIGNAR'
             redirect action: 'ver', id: empresa.id
         }
     }
@@ -116,7 +154,7 @@ class EmpresaController {
             return
         }
 
-        if (empresa.nombre != 'CENTERON') {
+        if (empresa.nombre != 'SIN ASIGNAR') {
 
             try {
                 if (Empresa.count() > 1) {
@@ -155,8 +193,34 @@ class EmpresaController {
             }
 
         } else {
-            flash.message = 'No se puede eliminar la empresa CENTERON'
+            flash.message = 'No se puede eliminar la empresa SIN ASIGNAR'
             redirect action: 'ver', id: params.id
+        }
+    }
+
+    def imagen() {
+        try {
+            def empresa = Empresa.get(params.id)
+            def foto
+            for(x in empresa?.imagenes) {
+                foto = x
+                break;
+            }
+            if (!foto) {
+                def directorio = servletContext.getRealPath("/images")
+                def file = new File("${directorio}/sin-foto.jpg")
+                foto = new Imagen(
+                    nombre : 'sin-foto.jpg'
+                    , tipoContenido : 'image/jpeg'
+                    , tamano : file.size()
+                    , archivo : file.getBytes()
+                )
+            }
+            response.contentType = foto.tipoContenido
+            response.contentLength = foto.tamano
+            response.outputStream << foto.archivo
+        } catch(Exception e) {
+            log.error("No se pudo obtener la imagen", e)
         }
     }
 }

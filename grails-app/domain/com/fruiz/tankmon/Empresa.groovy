@@ -8,7 +8,7 @@ class Empresa implements Serializable {
     String sitioWeb
     Integer maximoUsuarios = 5
 
-    static hasMany = [usuarios: Usuario]
+    static hasMany = [usuarios: Usuario, imagenes: Imagen]
 
     static constraints = {
         nombre(blank: false, unique: true)
