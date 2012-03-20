@@ -8,7 +8,7 @@
 <div id='login'>
 	<div class='inner'>
 		<g:if test='${flash.message}'>
-			<div class='alert alert-error'>${flash.message}</div>
+        <div class='alert <g:if test="${flash.messageStyle}">${flash.messageStyle}</g:if><g:else>alert-error</g:else>'>${flash.message}</div>
 		</g:if>
 
         <fieldset>
@@ -34,9 +34,10 @@
                 </div>
 
                 <div class="row-fluid" style='margin-top:10px;' >
-                    <div class="control-group">
-                        <input type='submit' id="submit" value='${message(code: "springSecurity.login.button")}' class="btn btn-large btn-primary span2" />
-                    </div>
+                    <p>
+                        <input type='submit' id="submit" value='${message(code: "springSecurity.login.button")}' class="btn btn-large btn-primary" style="width:150px;" />
+                        <a href="${createLink(action:'olvido')}" class='btn btn-large' style="width:150px;">¿Lo olvidó?</a>
+                    </p>
                 </div>
             </form>
         </fieldset>

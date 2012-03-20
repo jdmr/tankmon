@@ -11,10 +11,14 @@ import org.springframework.security.authentication.CredentialsExpiredException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.LockedException
 import org.springframework.security.core.context.SecurityContextHolder as SCH
+import org.springframework.security.crypto.keygen.KeyGenerators
 import org.springframework.security.web.WebAttributes
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
+import uk.co.desirableobjects.sendgrid.*
 
 class LoginController {
+
+    def sendGridService
 
 	/**
 	 * Dependency injection for the authenticationTrustResolver.
@@ -133,4 +137,37 @@ class LoginController {
 	def ajaxDenied = {
 		render([error: 'access denied'] as JSON)
 	}
+
+    def olvido() {
+        log.debug("Olvido su contrasena")
+    }
+
+    def restaurar() {
+        def usuario = Usuario.findByUsernameIlikeOrCorreoIlike(params.username,params.username)
+        if (!usuario) {
+            log.debug("No encontre una cuenta con ese usuario o correo")
+            flash.message = "No encontre una cuenta con ese usuario o correo"
+            redirect action:'olvido', params: params
+        }
+        Usuario.withTransaction {
+            String password = KeyGenerators.string().generateKey()
+            usuario.password = password
+            usuario.save(flush:true)
+            enviaCorreo(usuario, password)
+            flash.message = "Se ha enviado un correo a ${usuario.correo} con su nueva contraseña"
+            flash.messageStyle = 'alert-success'
+            redirect action:'auth'
+        }
+    }
+
+    def enviaCorreo(usuario, password) {
+        def email = new SendGridEmailBuilder()
+        email.from('David Mendoza', 'jdmendoza@um.edu.mx')
+        email.to("${usuario.nombre} ${usuario.apellido}", "${usuario.correo}")
+        email.replyTo('jdmendoza@um.edu.mx')
+        email.subject("Se ha renovado su contraseña")
+        email.withText("Se ha renovado su contraseña en http://tankmon.cloudfoundry.com.\n\nSu usuario es ${usuario.username}, su contraseña es ${password}.\n\nFRuiz e Hijos")
+        email.withHtml("<html><head><title>Se ha renovado la contraseña de ${usuario.username}</title></head><body><p>Se ha renovado la contraseña de su usuario en <a href='http://tankmon.cloudfoundry.com'>TANKMON</a><br/>Usuario: ${usuario.username}<br/>Contraseña: ${password}<br/></p><br/><br/><h3>FRuiz e Hijos</h3></body></html>")
+        sendGridService.send(email.build())
+    }
 }

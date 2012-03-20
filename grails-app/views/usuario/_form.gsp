@@ -11,9 +11,8 @@
 <div class="control-group ${hasErrors(bean: usuario, field: 'password', 'error')}">
 	<label for="password">
 		<g:message code="password.label" />
-		<span class="required-indicator">*</span>
 	</label>
-	<g:passwordField name="password" required="" value="${usuario?.password}"/>
+	<g:passwordField name="password" value="${usuario?.password}"/>
 </div>
 
 <div class="control-group ${hasErrors(bean: usuario, field: 'nombre', 'error')}">

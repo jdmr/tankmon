@@ -3,11 +3,14 @@ package com.fruiz.tankmon
 import grails.plugins.springsecurity.Secured
 import grails.validation.ValidationException
 import org.springframework.dao.DataIntegrityViolationException
+import org.springframework.security.crypto.keygen.KeyGenerators
+import uk.co.desirableobjects.sendgrid.*
 
 @Secured(['ROLE_ADMIN'])
 class UsuarioController {
 
     def springSecurityService
+    def sendGridService
 
     def index() {
         redirect action: 'lista', params: params
@@ -30,11 +33,17 @@ class UsuarioController {
         try {
             Usuario.withTransaction {
                 usuario.empresa = springSecurityService.currentUser.empresa
+                String password = usuario.password
+                if (!password) {
+                    password = KeyGenerators.string().generateKey()
+                    usuario.password = password
+                }
                 usuario.save(flush:true)
                 def roles = asignaRoles(params)
                 for(rol in roles) {
                     UsuarioRol.create(usuario, rol, false)
                 }
+                enviaCorreo(usuario, password)
             }
         } catch(ValidationException e) {
             def roles = obtineRoles(null)
@@ -164,5 +173,16 @@ class UsuarioController {
             roles << Rol.findByAuthority('ROLE_CLIENTE')
         }
         return roles
+    }
+
+    def enviaCorreo(usuario, password) {
+        def email = new SendGridEmailBuilder()
+        email.from('David Mendoza', 'jdmendoza@um.edu.mx')
+        email.to("${usuario.nombre} ${usuario.apellido}", "${usuario.correo}")
+        email.replyTo('jdmendoza@um.edu.mx')
+        email.subject("Se ha creado su cuenta")
+        email.withText("Se ha creado su cuenta en http://tankmon.cloudfoundry.com.\n\nSu usuario es ${usuario.username}, su contraseña es ${password}.\n\nFRuiz e Hijos")
+        email.withHtml("<html><head><title>Se ha creado su cuenta ${usuario.username}</title></head><body><p>Se ha creado su cuenta en <a href='http://tankmon.cloudfoundry.com'>TANKMON</a><br/>Usuario: ${usuario.username}<br/>Contraseña: ${password}<br/></p><br/><br/><h3>FRuiz e Hijos</h3></body></html>")
+        sendGridService.send(email.build())
     }
 }

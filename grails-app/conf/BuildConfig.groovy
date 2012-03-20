@@ -38,6 +38,7 @@ grails.project.dependency.resolution = {
         runtime 'postgresql:postgresql:9.0-801.jdbc4'
         runtime 'net.sf.opencsv:opencsv:2.1'
         compile "org.jadira.usertype:usertype.jodatime:1.9"
+        compile "org.springframework.security:spring-security-crypto:3.1.0.RELEASE"
     }
 
     plugins {

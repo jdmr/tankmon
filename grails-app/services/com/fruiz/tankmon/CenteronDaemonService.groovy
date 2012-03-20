@@ -113,20 +113,13 @@ class CenteronDaemonService  {
 
     def enviaCorreo(tanque, tipo) {
         def usuarios = tanque.empresa.usuarios
-        /*
-        sendGridService.sendMail {
-            from 'jdmendoza@um.edu.mx'
-            for(usuario in usuarios) {
-                to "${usuario.correo}"
-            }
-            subject "${tanque.nombre}(${tanque.asignacion}) en ${tipo}"
-            body "El tanque\n Nombre: ${tanque.nombre}\n Asignación: ${tanque.asignacion}\n Serie: ${tanque.serie}\n Tiene está solo al ${tanque.capacidadLleno * 100}% cuando el porcentaje válido es ${tanque.precaucion * 100}%.\n\nEquipo FRuiz"
-        }
-        */
-
+        def administradores = Usuario.executeQuery("select u from UsuarioRol ur inner join ur.usuario u where ur.rol.authority = :admin",[admin:'ROLE_ADMIN'])
         def email = new SendGridEmailBuilder()
         email.from('David Mendoza', 'jdmendoza@um.edu.mx')
         for(usuario in usuarios) {
+            email.to("${usuario.nombre} ${usuario.apellido}", "${usuario.correo}")
+        }
+        for(usuario in administradores) {
             email.to("${usuario.nombre} ${usuario.apellido}", "${usuario.correo}")
         }
         email.replyTo('jdmendoza@um.edu.mx')
